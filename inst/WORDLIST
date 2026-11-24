@@ -24,6 +24,7 @@ Feinstein
 Fligner
 Gabry
 Harrell
+Hurlbert
 Ieno
 Kotze
 Lakens
@@ -57,6 +58,7 @@ Smilauer
 TTEE
 Ter
 Vehtari
+VignetteBuilder
 Wasserstein
 Weisberg
 Wilk
@@ -85,6 +87,7 @@ jmozez
 knitr
 lme
 lme4
+metrix
 mgcv
 modeling
 moses
