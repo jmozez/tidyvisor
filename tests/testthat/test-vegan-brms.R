@@ -58,3 +58,16 @@ test_that("brms: a fit is explained and its poor convergence flagged", {
   expect_match(d, "should be below 1.01")
   expect_match(d, "should exceed 400")
 })
+
+test_that("the gradient-length rule follows CANOCO: longest DCA axis, 3 and 4 SD", {
+  skip_if_not_installed("vegan")
+  data("dune", package = "vegan")
+  dca <- vegan::decorana(log1p(as.matrix(dune)))
+  sc <- vegan::scores(dca, display = "sites", choices = 1:4)
+  longest <- max(apply(sc, 2, function(a) diff(range(a))))
+  expect_equal(tidyvisor:::tv_gradient_length(as.matrix(dune)), longest)
+  expect_match(tidyvisor:::tv_gradient_rule(2.99), "below 3 SD.*linear")
+  expect_match(tidyvisor:::tv_gradient_rule(3), "between 3 and 4 SD")
+  expect_match(tidyvisor:::tv_gradient_rule(4), "between 3 and 4 SD")
+  expect_match(tidyvisor:::tv_gradient_rule(4.01), "above 4 SD.*unimodal")
+})

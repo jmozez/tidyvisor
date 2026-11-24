@@ -34,11 +34,29 @@ Built-in advisor for the vegan package, for community data in the wide
 format vegan uses (one row per site, one column per species).
 \itemize{
 \item \strong{Before} (\code{question = "vegan"}): reports the number of sites and
-species, the share of zeros, and the length of the main gradient from a
-detrended correspondence analysis. From these it recommends a linear
-(RDA on Hellinger-transformed data) or a unimodal (CCA) method, NMDS
-for an unconstrained view, and PERMANOVA (\code{\link[vegan:adonis2]{vegan::adonis2()}}) with its
+species, the share of zeros, and the length of the main gradient. From
+these it recommends a linear or a unimodal method, NMDS for an
+unconstrained view, and PERMANOVA (\code{\link[vegan:adonis2]{vegan::adonis2()}}) with its
 companion check of dispersion (\code{\link[vegan:betadisper]{vegan::betadisper()}}).
+}
+
+\strong{The gradient-length rule.} The gradient length is the length of the
+longest axis of a detrended correspondence analysis (\code{\link[vegan:decorana]{vegan::decorana()}},
+detrending by segments, on log(y + 1) abundances or presence-absence),
+in standard-deviation (SD) units of species turnover. This is the value
+CANOCO reports. Over about 4 SD the species composition turns over
+completely.\tabular{lll}{
+   Gradient length \tab Species responses \tab Method \cr
+   below 3 SD \tab mostly monotonic \tab linear: PCA, RDA (on Hellinger-transformed abundances) \cr
+   3 to 4 SD \tab mixed \tab both appropriate; tidyvisor gives RDA, with CCA as the alternative \cr
+   above 4 SD \tab unimodal (rise and fall) \tab unimodal: CA, CCA \cr
+}
+
+
+The rule guides; it does not decide. Hellinger-transformed RDA
+(Legendre & Gallagher 2001) and distance-based methods (NMDS, db-RDA,
+PERMANOVA) are valid at any gradient length.
+\itemize{
 \item \strong{After}: explains \code{\link[vegan:metaMDS]{vegan::metaMDS()}} (stress against Clarke's
 benchmarks), \code{\link[vegan:rda]{vegan::rda()}}, \code{\link[vegan:cca]{vegan::cca()}}, \code{\link[vegan:capscale]{vegan::capscale()}} and
 \code{\link[vegan:dbrda]{vegan::dbrda()}} (variance explained, adjusted R-squared, permutation
@@ -64,10 +82,15 @@ analysis of variance. \emph{Austral Ecology} 26, 32-46.
 Clarke, K.R. (1993). Non-parametric multivariate analyses of changes in
 community structure. \emph{Australian Journal of Ecology} 18, 117-143.
 
+Leps, J. & Smilauer, P. (2003). \emph{Multivariate Analysis of Ecological
+Data using CANOCO}. Cambridge University Press. (Second edition for
+Canoco 5, 2014.)
+
 Legendre, P. & Gallagher, E.D. (2001). Ecologically meaningful
 transformations for ordination of species data. \emph{Oecologia} 129,
 271-280.
 
-Ter Braak, C.J.F. & Smilauer, P. (2002). \emph{CANOCO Reference Manual and
-CanoDraw for Windows User's Guide}. Microcomputer Power, Ithaca.
+Ter Braak, C.J.F. & Smilauer, P. (2012). \emph{Canoco Reference Manual and
+User's Guide: Software for Ordination (version 5.0)}. Microcomputer
+Power, Ithaca.
 }

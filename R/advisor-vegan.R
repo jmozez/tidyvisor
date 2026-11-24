@@ -5,11 +5,27 @@
 #' format vegan uses (one row per site, one column per species).
 #'
 #' * **Before** (`question = "vegan"`): reports the number of sites and
-#'   species, the share of zeros, and the length of the main gradient from a
-#'   detrended correspondence analysis. From these it recommends a linear
-#'   (RDA on Hellinger-transformed data) or a unimodal (CCA) method, NMDS
-#'   for an unconstrained view, and PERMANOVA ([vegan::adonis2()]) with its
+#'   species, the share of zeros, and the length of the main gradient. From
+#'   these it recommends a linear or a unimodal method, NMDS for an
+#'   unconstrained view, and PERMANOVA ([vegan::adonis2()]) with its
 #'   companion check of dispersion ([vegan::betadisper()]).
+#'
+#' **The gradient-length rule.** The gradient length is the length of the
+#' longest axis of a detrended correspondence analysis ([vegan::decorana()],
+#' detrending by segments, on log(y + 1) abundances or presence-absence),
+#' in standard-deviation (SD) units of species turnover. This is the value
+#' CANOCO reports. Over about 4 SD the species composition turns over
+#' completely.
+#'
+#' | Gradient length | Species responses | Method |
+#' |---|---|---|
+#' | below 3 SD | mostly monotonic | linear: PCA, RDA (on Hellinger-transformed abundances) |
+#' | 3 to 4 SD | mixed | both appropriate; tidyvisor gives RDA, with CCA as the alternative |
+#' | above 4 SD | unimodal (rise and fall) | unimodal: CA, CCA |
+#'
+#' The rule guides; it does not decide. Hellinger-transformed RDA
+#' (Legendre & Gallagher 2001) and distance-based methods (NMDS, db-RDA,
+#' PERMANOVA) are valid at any gradient length.
 #' * **After**: explains [vegan::metaMDS()] (stress against Clarke's
 #'   benchmarks), [vegan::rda()], [vegan::cca()], [vegan::capscale()] and
 #'   [vegan::dbrda()] (variance explained, adjusted R-squared, permutation
@@ -36,12 +52,17 @@
 #' Clarke, K.R. (1993). Non-parametric multivariate analyses of changes in
 #' community structure. *Australian Journal of Ecology* 18, 117-143.
 #'
+#' Leps, J. & Smilauer, P. (2003). *Multivariate Analysis of Ecological
+#' Data using CANOCO*. Cambridge University Press. (Second edition for
+#' Canoco 5, 2014.)
+#'
 #' Legendre, P. & Gallagher, E.D. (2001). Ecologically meaningful
 #' transformations for ordination of species data. *Oecologia* 129,
 #' 271-280.
 #'
-#' Ter Braak, C.J.F. & Smilauer, P. (2002). *CANOCO Reference Manual and
-#' CanoDraw for Windows User's Guide*. Microcomputer Power, Ithaca.
+#' Ter Braak, C.J.F. & Smilauer, P. (2012). *Canoco Reference Manual and
+#' User's Guide: Software for Ordination (version 5.0)*. Microcomputer
+#' Power, Ithaca.
 #' @name vegan-advisor
 #' @examplesIf rlang::is_installed("vegan")
 #' data("dune", "dune.env", package = "vegan")
@@ -65,11 +86,10 @@ tv_advise_vegan <- function(x, question = "vegan", species = NULL, env = NULL, .
     tv_check("Species", ncol(comm)),
     tv_check("Zeros", sprintf("%.0f%%", 100 * zeros), if (zeros > 0.5) "many zeros: avoid Euclidean distances on raw counts (double-zero problem); use Hellinger or Bray-Curtis" else "")
   )
-  dca <- tryCatch(vegan::decorana(comm), error = function(e) NULL)
-  len <- if (!is.null(dca)) diff(range(vegan::scores(dca, display = "sites")[, 1])) else NA
+  len <- tv_gradient_length(comm)
   acc[[4]] <- tv_check(
-    "Gradient length (DCA axis 1, SD units)", sprintf("%.1f", len),
-    if (is.na(len)) "" else if (len > 4) "long: species turn over along it; unimodal methods (CA, CCA) fit" else if (len < 3) "short: species respond roughly linearly; linear methods (PCA, RDA) on Hellinger-transformed data fit" else "intermediate: both linear (after Hellinger) and unimodal methods are defensible"
+    "Gradient length (longest DCA axis, SD units)", sprintf("%.2f", len),
+    tv_gradient_rule(len)
   )
   unimodal <- isTRUE(len > 4)
   step <- function(s, r, why, code = "") tibble::tibble(step = s, recommendation = r, reason = why, code = code)
@@ -78,10 +98,12 @@ tv_advise_vegan <- function(x, question = "vegan", species = NULL, env = NULL, .
   if (length(env)) {
     rhs <- paste(env, collapse = " + ")
     rows[[1]] <- if (unimodal) {
-      step("Model", "Canonical correspondence analysis (CCA)", "A long gradient means species have optima along it; CCA models unimodal responses (ter Braak & Smilauer 2002).",
+      step("Model", "Canonical correspondence analysis (CCA)", "A long gradient means species have optima along it; CCA models unimodal responses (ter Braak & Smilauer 2012).",
            sprintf("%s\nm <- vegan::cca(comm ~ %s, data = data)", sp, rhs))
     } else {
-      step("Model", "Redundancy analysis (RDA) on Hellinger-transformed abundances", "The Hellinger transformation removes the double-zero problem so RDA can be used on community data (Legendre & Gallagher 2001).",
+      step("Model", "Redundancy analysis (RDA) on Hellinger-transformed abundances",
+           paste(if (isTRUE(len >= 3)) "With a gradient of 3 to 4 SD, linear and unimodal methods are both appropriate; CCA (vegan::cca(comm ~ ...)) is the alternative." else "A gradient shorter than 3 SD suits a linear method.",
+                 "The Hellinger transformation removes the double-zero problem so RDA can be used on community data (Legendre & Gallagher 2001)."),
            sprintf("%s\nm <- vegan::rda(vegan::decostand(comm, \"hellinger\") ~ %s, data = data)", sp, rhs))
     }
     rows[[2]] <- step("Test", "Permutation tests of the model, the axes and each term", "Community data are not multivariate normal; permutations give valid p-values.",
@@ -174,6 +196,32 @@ tv_interpret_vegan <- function(x, permutations = 999, ...) {
     s$Note <- "envfit is a post hoc fit onto fixed axes: it shows association, not how much of the composition the variables explain (use a constrained ordination for that)."
   }
   structure(list(sections = s, tables = list()), class = "tv_interpretation")
+}
+
+# Length of the main gradient as CANOCO reports it: the longest of the four
+# DCA axes (detrending by segments, rescaled to SD units of species
+# turnover), on log(y + 1) abundances or on presence-absence data.
+tv_gradient_length <- function(comm) {
+  y <- if (all(comm %in% c(0, 1))) comm else log1p(comm)
+  dca <- tryCatch(suppressWarnings(vegan::decorana(y)), error = function(e) NULL)
+  if (is.null(dca)) {
+    return(NA_real_)
+  }
+  sc <- vegan::scores(dca, display = "sites", choices = 1:4)
+  max(apply(sc, 2, function(a) diff(range(a))))
+}
+
+# The rule of Leps & Smilauer (2003) and ter Braak & Smilauer (2012), in words
+tv_gradient_rule <- function(len) {
+  if (is.na(len)) {
+    "could not be measured"
+  } else if (len < 3) {
+    "below 3 SD: short; most species change monotonically, so use a linear method (PCA, RDA; on Hellinger-transformed abundances)"
+  } else if (len > 4) {
+    "above 4 SD: long; species rise and fall along it, so use a unimodal method (CA, CCA)"
+  } else {
+    "between 3 and 4 SD: intermediate; linear and unimodal methods are both appropriate"
+  }
 }
 
 # Sentences for the rows of an anova.cca table (adonis2 or anova.cca)

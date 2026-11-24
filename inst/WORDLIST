@@ -5,6 +5,7 @@ BugReports
 CANOCO
 CMD
 CanoDraw
+Canoco
 Concato
 Config
 ESS
@@ -14,6 +15,7 @@ Feinstein
 Gabry
 Harrell
 Ieno
+Leps
 Lesnoff
 Lifecycle
 Modeling
@@ -46,6 +48,8 @@ com
 concurvity
 cph
 cre
+db
+detrending
 df
 e4794
 ed
