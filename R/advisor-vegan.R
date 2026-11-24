@@ -98,17 +98,17 @@ tv_advise_vegan <- function(x, question = "vegan", species = NULL, env = NULL, .
   if (length(env)) {
     rhs <- paste(env, collapse = " + ")
     rows[[1]] <- if (unimodal) {
-      step("Model", "Canonical correspondence analysis (CCA)", "A long gradient means species have optima along it; CCA models unimodal responses (ter Braak & Smilauer 2012).",
+      step("Model", "Canonical correspondence analysis (CCA)", "Branch: constrained ordination (a picture of the gradients your variables explain, tested by permutation). A long gradient means species have optima along it; CCA models unimodal responses (ter Braak & Smilauer 2012).",
            sprintf("%s\nm <- vegan::cca(comm ~ %s, data = data)", sp, rhs))
     } else {
       step("Model", "Redundancy analysis (RDA) on Hellinger-transformed abundances",
-           paste(if (isTRUE(len >= 3)) "With a gradient of 3 to 4 SD, linear and unimodal methods are both appropriate; CCA (vegan::cca(comm ~ ...)) is the alternative." else "A gradient shorter than 3 SD suits a linear method.",
+           paste("Branch: constrained ordination (a picture of the gradients your variables explain, tested by permutation).", if (isTRUE(len >= 3)) "With a gradient of 3 to 4 SD, linear and unimodal methods are both appropriate; CCA (vegan::cca(comm ~ ...)) is the alternative." else "A gradient shorter than 3 SD suits a linear method.",
                  "The Hellinger transformation removes the double-zero problem so RDA can be used on community data (Legendre & Gallagher 2001)."),
            sprintf("%s\nm <- vegan::rda(vegan::decostand(comm, \"hellinger\") ~ %s, data = data)", sp, rhs))
     }
     rows[[2]] <- step("Test", "Permutation tests of the model, the axes and each term", "Community data are not multivariate normal; permutations give valid p-values.",
                       "anova(m); anova(m, by = \"terms\"); vegan::RsquareAdj(m)")
-    rows[[3]] <- step("Alternative", "PERMANOVA on Bray-Curtis dissimilarities", "Tests differences in composition without assuming a linear or unimodal response (Anderson 2001).",
+    rows[[3]] <- step("Alternative", "PERMANOVA on Bray-Curtis dissimilarities", "Branch: multivariate test (a p-value, no picture). Tests differences in composition without assuming a linear or unimodal response (Anderson 2001).",
                       sprintf("vegan::adonis2(comm ~ %s, data = data, method = \"bray\", by = \"terms\")", rhs))
     fac <- env[vapply(env, function(v) is.factor(x[[v]]) || is.character(x[[v]]), TRUE)]
     if (length(fac)) {
@@ -117,7 +117,7 @@ tv_advise_vegan <- function(x, question = "vegan", species = NULL, env = NULL, .
                         sprintf("b <- vegan::betadisper(vegan::vegdist(comm), data$%s); anova(b)", fac[1]))
     }
   } else {
-    rows[[1]] <- step("Model", "Non-metric multidimensional scaling (NMDS) on Bray-Curtis", "NMDS preserves the rank order of dissimilarities and makes no assumption about species responses; check its stress.",
+    rows[[1]] <- step("Model", "Non-metric multidimensional scaling (NMDS) on Bray-Curtis", "Branch: unconstrained ordination (a picture, no test). NMDS preserves the rank order of dissimilarities and makes no assumption about species responses; check its stress.",
                       sprintf("%s\nm <- vegan::metaMDS(comm, distance = \"bray\", k = 2, trymax = 50)", sp))
     rows[[2]] <- step("Alternative", if (unimodal) "Correspondence analysis (CA)" else "PCA on Hellinger-transformed abundances", "An eigenvector method whose axes have explained variances.",
                       if (unimodal) "m2 <- vegan::cca(comm)" else "m2 <- vegan::rda(vegan::decostand(comm, \"hellinger\"))")
