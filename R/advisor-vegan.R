@@ -1,7 +1,7 @@
-#' Adviser for vegan: ordination and multivariate tests
+#' Advisor for vegan: ordination and multivariate tests
 #'
 #' @description
-#' Built-in adviser for the vegan package, for community data in the wide
+#' Built-in advisor for the vegan package, for community data in the wide
 #' format vegan uses (one row per site, one column per species).
 #'
 #' * **Before** (`question = "vegan"`): reports the number of sites and
@@ -17,7 +17,7 @@
 #'   and [vegan::envfit()].
 #'
 #' For long-format data, tidydiversity offers the same analyses through
-#' `ord_fit()`; its adviser answers `tidyvisor(data, abundance = ...)`.
+#' `ord_fit()`; its advisor answers `tidyvisor(data, abundance = ...)`.
 #'
 #' @param x A wide data frame of sites (advice), or a vegan result
 #'   (interpretation).

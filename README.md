@@ -8,7 +8,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-**tidyvisor** is a statistical adviser for ecological analyses. Before
+**tidyvisor** is a statistical advisor for ecological analyses. Before
 an analysis, give it your data and your question: it checks the data for
 the usual pitfalls and recommends the analysis, the test and the plots,
 with the code to run. After the analysis, give it the result: it
@@ -17,10 +17,10 @@ explains the numbers and the figure in plain sentences.
 It always gives its reasons, so its advice can be checked and overruled.
 The question, which only you know, comes first.
 
-## One adviser, many packages
+## One advisor, many packages
 
 The knowledge lives in the packages that do the analyses. Each registers
-an *adviser* with tidyvisor, and one `tidyvisor()` serves them all:
+an *advisor* with tidyvisor, and one `tidyvisor()` serves them all:
 
 | Package                                               | Field             | Advises on                                                                                                                                        |
 |-------------------------------------------------------|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -43,7 +43,7 @@ remotes::install_github("jmozez/tidymapr")
 ## Before the analysis: which analysis?
 
 Community data, with abundances and a question about site variables, go
-to the tidydiversity adviser:
+to the tidydiversity advisor:
 
 ``` r
 library(tidyvisor)
@@ -94,7 +94,7 @@ tidyvisor(frogs, abundance = abundance)
 #> ord_interpret(ord)
 ```
 
-Case counts and a question about an epidemic go to the tidymapr adviser:
+Case counts and a question about an epidemic go to the tidymapr advisor:
 
 ``` r
 cases <- data.frame(
@@ -197,7 +197,7 @@ m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = lme4::sleepstudy)
 tidyvisor(m)
 ```
 
-## Which advisers are there?
+## Which advisors are there?
 
 ``` r
 advisors()

@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use tidyvisor, please cite it as below."
 type: software
-title: "tidyvisor: A Statistical Adviser for Tidy Ecological Analyses"
+title: "tidyvisor: A Statistical Advisor for Tidy Ecological Analyses"
 abstract: "Advice before the analysis and plain-language interpretation after it, shared by tidydiversity and tidymapr."
 authors:
   - family-names: Moses

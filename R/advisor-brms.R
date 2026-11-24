@@ -1,7 +1,7 @@
-#' Adviser for brms: Bayesian regression and mixed models
+#' Advisor for brms: Bayesian regression and mixed models
 #'
 #' @description
-#' Built-in adviser for [brms::brm()].
+#' Built-in advisor for [brms::brm()].
 #'
 #' * **Before** (`question = "bayesian"`): chooses the family from the kind
 #'   of response (including `trials()` for successes out of trials, and

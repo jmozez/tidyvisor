@@ -1,5 +1,5 @@
 Package: tidyvisor
-Title: A Statistical Adviser for Tidy Ecological Analyses
+Title: A Statistical Advisor for Tidy Ecological Analyses
 Version: 0.2.0
 Authors@R: 
     person("Jimmy", "Moses", , "jimmy.moses@pnguot.ac.pg", role = c("aut", "cre", "cph"),
@@ -11,7 +11,7 @@ Description: Advice before the analysis and interpretation after it, shared
     result, it explains the numbers and the figure in plain sentences, with
     its reasons, so the advice can be checked and overruled. The knowledge
     lives in the packages that do the analyses, each of which registers an
-    adviser: 'tidydiversity' for community ecology (which ordination and
+    advisor: 'tidydiversity' for community ecology (which ordination and
     which test) and 'tidymapr' for spatial ecology (species distributions,
     the spread of invasions and epidemics, range shifts and spatial
     autocorrelation).

@@ -1,7 +1,7 @@
-#' The regression adviser: linear and generalised linear models
+#' The regression advisor: linear and generalised linear models
 #'
 #' @description
-#' The built-in adviser for [stats::lm()] and [stats::glm()]. It is
+#' The built-in advisor for [stats::lm()] and [stats::glm()]. It is
 #' registered under the name `"stats"`, so [tidyvisor()] uses it for
 #' `question = "regression"` and for any fitted `lm` or `glm`.
 #'

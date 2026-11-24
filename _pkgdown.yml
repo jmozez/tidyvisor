@@ -37,18 +37,18 @@ navbar:
       href: https://github.com/jmozez/tidyvisor
 
 reference:
-  - title: The adviser
+  - title: The advisor
     contents:
       - tidyvisor
       - advise
       - interpret
-  - title: Built-in advisers
+  - title: Built-in advisors
     contents:
       - regression-advisor
       - model-advisors
       - vegan-advisor
       - brms-advisor
-  - title: Advisers from other packages
+  - title: Advisors from other packages
     contents:
       - advisors
       - register_advisor

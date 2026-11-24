@@ -8,7 +8,7 @@
 \alias{tv_interpret_mixed}
 \alias{tv_interpret_gam}
 \alias{tv_interpret_aod}
-\title{Advisers for mixed, additive and overdispersed models}
+\title{Advisors for mixed, additive and overdispersed models}
 \usage{
 tv_advise_mixed(
   x,
@@ -75,7 +75,7 @@ successes out of trials.}
 A \code{tv_advice} or a \code{tv_interpretation} object.
 }
 \description{
-Built-in advisers for four widely used modelling packages. Each gives
+Built-in advisors for four widely used modelling packages. Each gives
 advice before fitting (from a data frame) and a plain-language
 interpretation after it (from the fitted model).
 \itemize{

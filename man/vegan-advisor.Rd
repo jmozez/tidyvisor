@@ -4,7 +4,7 @@
 \alias{vegan-advisor}
 \alias{tv_advise_vegan}
 \alias{tv_interpret_vegan}
-\title{Adviser for vegan: ordination and multivariate tests}
+\title{Advisor for vegan: ordination and multivariate tests}
 \usage{
 tv_advise_vegan(x, question = "vegan", species = NULL, env = NULL, ...)
 
@@ -30,7 +30,7 @@ interpreting a constrained ordination.}
 A \code{tv_advice} or a \code{tv_interpretation} object.
 }
 \description{
-Built-in adviser for the vegan package, for community data in the wide
+Built-in advisor for the vegan package, for community data in the wide
 format vegan uses (one row per site, one column per species).
 \itemize{
 \item \strong{Before} (\code{question = "vegan"}): reports the number of sites and
@@ -47,7 +47,7 @@ and \code{\link[vegan:envfit]{vegan::envfit()}}.
 }
 
 For long-format data, tidydiversity offers the same analyses through
-\code{ord_fit()}; its adviser answers \code{tidyvisor(data, abundance = ...)}.
+\code{ord_fit()}; its advisor answers \code{tidyvisor(data, abundance = ...)}.
 }
 \examples{
 \dontshow{if (rlang::is_installed("vegan")) withAutoprint(\{ # examplesIf}

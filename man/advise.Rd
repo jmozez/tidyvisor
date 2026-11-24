@@ -10,24 +10,24 @@ advise(x, question = "auto", ...)
 \item{x}{A data frame.}
 
 \item{question}{What is asked, or \code{"auto"}. \code{\link[=advisors]{advisors()}} lists the
-questions of each adviser.}
+questions of each advisor.}
 
-\item{...}{Passed to the adviser.}
+\item{...}{Passed to the advisor.}
 }
 \value{
-The adviser's advice.
+The advisor's advice.
 }
 \description{
-\code{advise()} finds the adviser for a data frame and a question, and returns
+\code{advise()} finds the advisor for a data frame and a question, and returns
 its advice: what the data show, the analysis to run and why, the test, the
 plots, and the code.
 }
 \details{
-The adviser is chosen by \code{question}. With \code{question = "auto"} (the
-default), each installed adviser is asked whether the data and the
+The advisor is chosen by \code{question}. With \code{question = "auto"} (the
+default), each installed advisor is asked whether the data and the
 arguments look like its kind: community data given with \code{abundance} or a
 \code{formula} belong to tidydiversity, dated records or case counts to
-tidymapr. When more than one adviser claims the data, give \code{question}.
+tidymapr. When more than one advisor claims the data, give \code{question}.
 }
 \examples{
 \dontshow{if (rlang::is_installed("tidymapr")) withAutoprint(\{ # examplesIf}

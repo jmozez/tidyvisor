@@ -10,24 +10,24 @@ tidyvisor(x, ...)
 \item{x}{A data frame (to be advised) or a fitted result (to be
 interpreted).}
 
-\item{...}{Passed to \code{\link[=advise]{advise()}} or \code{\link[=interpret]{interpret()}}, and on to the adviser:
+\item{...}{Passed to \code{\link[=advise]{advise()}} or \code{\link[=interpret]{interpret()}}, and on to the advisor:
 for example \code{question}, the columns to use, or \code{abundance} and \code{formula}
 for community data.}
 }
 \value{
-The adviser's advice or interpretation, which prints as sentences.
+The advisor's advice or interpretation, which prints as sentences.
 }
 \description{
-\code{tidyvisor()} is a statistical adviser shared by a family of packages. Give
+\code{tidyvisor()} is a statistical advisor shared by a family of packages. Give
 it \strong{data} and a question, and it recommends the analysis, checks the data
 for the usual pitfalls, and names the plots and the code to run
 (\code{\link[=advise]{advise()}}). Give it a \strong{result}, and it explains the numbers and the
 figure in plain sentences (\code{\link[=interpret]{interpret()}}).
 
 The knowledge lives in the packages that do the analyses. Each one
-registers an \emph{adviser} with tidyvisor (\code{\link[=register_advisor]{register_advisor()}}): the questions
+registers an \emph{advisor} with tidyvisor (\code{\link[=register_advisor]{register_advisor()}}): the questions
 it answers, the results it can interpret, and how to recognise its kind of
-data. tidyvisor knows two advisers out of the box:
+data. tidyvisor knows two advisors out of the box:
 \itemize{
 \item \strong{tidydiversity} (community ecology): which ordination, constrained or
 unconstrained, linear or unimodal, and which test; interpretation of

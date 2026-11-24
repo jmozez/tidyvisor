@@ -1,8 +1,8 @@
-#' Register an adviser with tidyvisor
+#' Register an advisor with tidyvisor
 #'
 #' @description
 #' A package that wants [tidyvisor()] to advise on its analyses and interpret
-#' its results registers an *adviser*, usually from its `.onLoad()`:
+#' its results registers an *advisor*, usually from its `.onLoad()`:
 #'
 #' ```r
 #' .onLoad <- function(libname, pkgname) {
@@ -19,17 +19,17 @@
 #' }
 #' ```
 #'
-#' Registering again under the same `package` replaces the earlier adviser,
+#' Registering again under the same `package` replaces the earlier advisor,
 #' so a package's own registration takes precedence over the built-in one.
 #'
-#' @param package Name of the package that provides the adviser.
+#' @param package Name of the package that provides the advisor.
 #' @param questions The questions it answers (used by [advise()] with
 #'   `question = "..."`).
 #' @param classes Classes of the results it can interpret.
 #' @param advise,interpret Functions `function(x, ...)` returning the advice
 #'   or the interpretation, or names of functions exported by `package`.
 #' @param claims A function `function(x, args)` returning `TRUE` when a data
-#'   frame `x`, given with arguments named `args`, is this adviser's kind of
+#'   frame `x`, given with arguments named `args`, is this advisor's kind of
 #'   data (used by [advise()] with `question = "auto"`). It must not evaluate
 #'   the arguments, which may be bare column names.
 #' @param title A short description shown by [advisors()].
@@ -49,9 +49,9 @@ register_advisor <- function(package, questions, classes, advise, interpret,
   invisible(entry)
 }
 
-#' List the available advisers
+#' List the available advisors
 #'
-#' @return A tibble with one row per adviser: `package`, `title`, whether the
+#' @return A tibble with one row per advisor: `package`, `title`, whether the
 #'   package is `installed`, its `questions` and the result `classes` it can
 #'   interpret.
 #' @export
@@ -71,15 +71,15 @@ advisors <- function() {
 tv_env <- new.env(parent = emptyenv())
 tv_env$advisors <- list()
 
-# Advisers whose package is installed. Loading a package lets it replace the
-# built-in adviser with its own registration.
+# Advisors whose package is installed. Loading a package lets it replace the
+# built-in advisor with its own registration.
 tv_registry <- function() {
   regs <- tv_env$advisors
   ok <- vapply(names(regs), function(p) requireNamespace(p, quietly = TRUE), TRUE)
   tv_env$advisors[ok]
 }
 
-# Built-in advisers: regression with lm() and glm(), lme4, glmmTMB, mgcv,
+# Built-in advisors: regression with lm() and glm(), lme4, glmmTMB, mgcv,
 # aods3, vegan and brms, and the two companion
 # packages through the functions they already export (tidydiversity and
 # tidymapr 0.3.0 and later).

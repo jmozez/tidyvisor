@@ -80,7 +80,7 @@ test_that("aods3: beta-binomial advice and interpretation", {
   expect_match(i$sections$Overdispersion[1], "phi")
 })
 
-test_that("the most specific adviser interprets a model", {
+test_that("the most specific advisor interprets a model", {
   skip_if_not_installed("mgcv")
   m <- mgcv::gam(mpg ~ s(wt), data = mtcars)
   expect_true("Smooths" %in% names(interpret(m)$sections))

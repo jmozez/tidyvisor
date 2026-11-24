@@ -1,6 +1,6 @@
 # tidyvisor 0.2.0
 
-* New built-in advisers for six modelling packages, each with advice before
+* New built-in advisors for six modelling packages, each with advice before
   fitting and an interpretation after it:
   - lme4 (`question = "mixed"`, or give `random`): checks the grouping
     factors, chooses `lmer()`, `glmer()` or `glmer.nb()`, and explains fixed
@@ -23,9 +23,9 @@
     binomial models, with the overdispersion parameter explained.
 * `tidyvisor()` sends results that are also data frames (an `adonis2()`
   table) to `interpret()`.
-* `interpret()` uses the adviser for the most specific class, so a `gam`
-  (which is also a `glm`) goes to the mgcv adviser.
-* New built-in adviser for linear and generalised linear models
+* `interpret()` uses the advisor for the most specific class, so a `gam`
+  (which is also a `glm`) goes to the mgcv advisor.
+* New built-in advisor for linear and generalised linear models
   (`question = "regression"`, and any fitted `lm` or `glm`). Before fitting,
   it chooses the family and link from the kind of response (continuous,
   counts, binary, proportions, positive and skewed), checks counts for
@@ -38,11 +38,11 @@
 
 # tidyvisor 0.1.0
 
-* First release. tidyvisor is the statistical adviser shared by tidydiversity
+* First release. tidyvisor is the statistical advisor shared by tidydiversity
   and tidymapr, moved into a package of its own so that one `tidyvisor()`
   serves both, whichever is loaded.
 * `tidyvisor()` advises on data (`advise()`) and interprets fitted results
   (`interpret()`).
-* `register_advisor()` lets any package add an adviser; `advisors()` lists
-  them. Advisers for tidydiversity (community ecology) and tidymapr (spatial
+* `register_advisor()` lets any package add an advisor; `advisors()` lists
+  them. Advisors for tidydiversity (community ecology) and tidymapr (spatial
   ecology) are built in and used when those packages are installed.

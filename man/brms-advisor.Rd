@@ -4,7 +4,7 @@
 \alias{brms-advisor}
 \alias{tv_advise_brms}
 \alias{tv_interpret_brms}
-\title{Adviser for brms: Bayesian regression and mixed models}
+\title{Advisor for brms: Bayesian regression and mixed models}
 \usage{
 tv_advise_brms(
   x,
@@ -34,7 +34,7 @@ tv_interpret_brms(x, level = 0.95, ...)
 A \code{tv_advice} or a \code{tv_interpretation} object.
 }
 \description{
-Built-in adviser for \code{\link[brms:brm]{brms::brm()}}.
+Built-in advisor for \code{\link[brms:brm]{brms::brm()}}.
 \itemize{
 \item \strong{Before} (\code{question = "bayesian"}): chooses the family from the kind
 of response (including \code{trials()} for successes out of trials, and

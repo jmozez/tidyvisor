@@ -1,16 +1,16 @@
 #' tidyvisor: advice before the analysis, interpretation after it
 #'
 #' @description
-#' `tidyvisor()` is a statistical adviser shared by a family of packages. Give
+#' `tidyvisor()` is a statistical advisor shared by a family of packages. Give
 #' it **data** and a question, and it recommends the analysis, checks the data
 #' for the usual pitfalls, and names the plots and the code to run
 #' ([advise()]). Give it a **result**, and it explains the numbers and the
 #' figure in plain sentences ([interpret()]).
 #'
 #' The knowledge lives in the packages that do the analyses. Each one
-#' registers an *adviser* with tidyvisor ([register_advisor()]): the questions
+#' registers an *advisor* with tidyvisor ([register_advisor()]): the questions
 #' it answers, the results it can interpret, and how to recognise its kind of
-#' data. tidyvisor knows two advisers out of the box:
+#' data. tidyvisor knows two advisors out of the box:
 #'
 #' * **tidydiversity** (community ecology): which ordination, constrained or
 #'   unconstrained, linear or unimodal, and which test; interpretation of
@@ -25,10 +25,10 @@
 #'
 #' @param x A data frame (to be advised) or a fitted result (to be
 #'   interpreted).
-#' @param ... Passed to [advise()] or [interpret()], and on to the adviser:
+#' @param ... Passed to [advise()] or [interpret()], and on to the advisor:
 #'   for example `question`, the columns to use, or `abundance` and `formula`
 #'   for community data.
-#' @return The adviser's advice or interpretation, which prints as sentences.
+#' @return The advisor's advice or interpretation, which prints as sentences.
 #' @seealso [advise()], [interpret()], [advisors()], [register_advisor()]
 #' @export
 #' @examplesIf rlang::is_installed(c("tidydiversity", "vegan"))
@@ -44,28 +44,28 @@
 #' tidyvisor(ord)
 tidyvisor <- function(x, ...) {
   # some results are data frames too (an adonis2 table), so check the
-  # classes the advisers interpret first
+  # classes the advisors interpret first
   known <- unlist(lapply(tv_registry(), `[[`, "classes"))
   if (is.data.frame(x) && !inherits(x, known)) advise(x, ...) else interpret(x, ...)
 }
 
 #' Advice on which analysis to run
 #'
-#' `advise()` finds the adviser for a data frame and a question, and returns
+#' `advise()` finds the advisor for a data frame and a question, and returns
 #' its advice: what the data show, the analysis to run and why, the test, the
 #' plots, and the code.
 #'
-#' The adviser is chosen by `question`. With `question = "auto"` (the
-#' default), each installed adviser is asked whether the data and the
+#' The advisor is chosen by `question`. With `question = "auto"` (the
+#' default), each installed advisor is asked whether the data and the
 #' arguments look like its kind: community data given with `abundance` or a
 #' `formula` belong to tidydiversity, dated records or case counts to
-#' tidymapr. When more than one adviser claims the data, give `question`.
+#' tidymapr. When more than one advisor claims the data, give `question`.
 #'
 #' @param x A data frame.
 #' @param question What is asked, or `"auto"`. [advisors()] lists the
-#'   questions of each adviser.
-#' @param ... Passed to the adviser.
-#' @return The adviser's advice.
+#'   questions of each advisor.
+#' @param ... Passed to the advisor.
+#' @return The advisor's advice.
 #' @export
 #' @examplesIf rlang::is_installed("tidymapr")
 #' cases <- data.frame(
@@ -93,7 +93,7 @@ advise <- function(x, question = "auto", ...) {
   }
   if (length(hit) > 1) {
     cli::cli_abort(c(
-      "More than one adviser recognises these data: {.pkg {vapply(hit, `[[`, '', 'package')}}.",
+      "More than one advisor recognises these data: {.pkg {vapply(hit, `[[`, '', 'package')}}.",
       i = "Give {.arg question} to choose; {.fn advisors} lists the questions."
     ))
   }
@@ -102,15 +102,15 @@ advise <- function(x, question = "auto", ...) {
 
 #' Plain-language interpretation of a fitted result
 #'
-#' `interpret()` finds the adviser that knows the class of `x` and returns its
+#' `interpret()` finds the advisor that knows the class of `x` and returns its
 #' interpretation: the numbers in sentences, what the tests say, and how to
 #' read the figure.
 #'
 #' @param x A fitted result, such as an ordination from
 #'   `tidydiversity::ord_fit()` or a growth rate from
 #'   `tidymapr::epi_growth_rate()`.
-#' @param ... Passed to the adviser (for example `permutations`).
-#' @return The adviser's interpretation.
+#' @param ... Passed to the advisor (for example `permutations`).
+#' @return The advisor's interpretation.
 #' @export
 #' @examplesIf rlang::is_installed("tidymapr")
 #' cases <- data.frame(
@@ -121,17 +121,17 @@ advise <- function(x, question = "auto", ...) {
 #' interpret(g)
 interpret <- function(x, ...) {
   regs <- tv_registry()
-  # the adviser for the most specific class wins (a gam is also a glm)
+  # the advisor for the most specific class wins (a gam is also a glm)
   cls <- if (isS4(x)) methods::is(x) else class(x)
   rank <- vapply(regs, function(r) suppressWarnings(min(match(r$classes, cls), na.rm = TRUE)), 0)
   hit <- regs[is.finite(rank)][order(rank[is.finite(rank)])]
   if (!length(hit)) {
     cli::cli_abort(c(
-      "No adviser knows how to interpret an object of class {.cls {class(x)}}.",
+      "No advisor knows how to interpret an object of class {.cls {class(x)}}.",
       i = if (length(regs)) {
-        "Advisers available: {.pkg {vapply(regs, `[[`, '', 'package')}}; see {.fn advisors}."
+        "Advisors available: {.pkg {vapply(regs, `[[`, '', 'package')}}; see {.fn advisors}."
       } else {
-        "No adviser is available: install tidydiversity or tidymapr."
+        "No advisor is available: install tidydiversity or tidymapr."
       }
     ))
   }
@@ -144,20 +144,20 @@ tv_abort_question <- function(question, regs, call = rlang::caller_env()) {
   }))
   cli::cli_abort(c(
     if (identical(question, "auto")) {
-      "No adviser recognises these data."
+      "No advisor recognises these data."
     } else {
-      "No adviser answers the question {.val {question}}."
+      "No advisor answers the question {.val {question}}."
     },
     i = if (length(qs)) {
       "Questions available:"
     } else {
-      "No adviser is available: install tidydiversity or tidymapr."
+      "No advisor is available: install tidydiversity or tidymapr."
     },
     stats::setNames(qs, rep("*", length(qs)))
   ), call = call)
 }
 
-# Call an adviser's advise or interpret function, loading its package on
+# Call an advisor's advise or interpret function, loading its package on
 # first use.
 tv_call <- function(reg, what, x, ...) {
   fun <- reg[[what]]

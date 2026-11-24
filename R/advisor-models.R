@@ -1,7 +1,7 @@
-#' Advisers for mixed, additive and overdispersed models
+#' Advisors for mixed, additive and overdispersed models
 #'
 #' @description
-#' Built-in advisers for four widely used modelling packages. Each gives
+#' Built-in advisors for four widely used modelling packages. Each gives
 #' advice before fitting (from a data frame) and a plain-language
 #' interpretation after it (from the fitted model).
 #'
@@ -217,7 +217,7 @@ tv_advise_aod <- function(x, question = "overdispersion", response, predictors =
     what <- "Negative binomial model (aods3::aodml, family = \"nb\")"
     why <- "Counts more variable than the Poisson are modelled with a negative binomial whose extra variation (phi) is estimated."
   } else {
-    cli::cli_abort("The overdispersion adviser needs counts, or successes out of {.arg trials}.")
+    cli::cli_abort("The overdispersion advisor needs counts, or successes out of {.arg trials}.")
   }
   step <- function(s, r, why, code = "") tibble::tibble(step = s, recommendation = r, reason = why, code = code)
   advice <- rbind(

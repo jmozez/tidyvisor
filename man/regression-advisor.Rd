@@ -4,7 +4,7 @@
 \alias{regression-advisor}
 \alias{tv_advise_regression}
 \alias{tv_interpret_regression}
-\title{The regression adviser: linear and generalised linear models}
+\title{The regression advisor: linear and generalised linear models}
 \usage{
 tv_advise_regression(
   x,
@@ -40,7 +40,7 @@ name of the column holding the number of trials.}
 sentences.
 }
 \description{
-The built-in adviser for \code{\link[stats:lm]{stats::lm()}} and \code{\link[stats:glm]{stats::glm()}}. It is
+The built-in advisor for \code{\link[stats:lm]{stats::lm()}} and \code{\link[stats:glm]{stats::glm()}}. It is
 registered under the name \code{"stats"}, so \code{\link[=tidyvisor]{tidyvisor()}} uses it for
 \code{question = "regression"} and for any fitted \code{lm} or \code{glm}.
 

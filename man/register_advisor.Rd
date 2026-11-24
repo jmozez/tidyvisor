@@ -2,7 +2,7 @@
 % Please edit documentation in R/registry.R
 \name{register_advisor}
 \alias{register_advisor}
-\title{Register an adviser with tidyvisor}
+\title{Register an advisor with tidyvisor}
 \usage{
 register_advisor(
   package,
@@ -15,7 +15,7 @@ register_advisor(
 )
 }
 \arguments{
-\item{package}{Name of the package that provides the adviser.}
+\item{package}{Name of the package that provides the advisor.}
 
 \item{questions}{The questions it answers (used by \code{\link[=advise]{advise()}} with
 \code{question = "..."}).}
@@ -26,7 +26,7 @@ register_advisor(
 or the interpretation, or names of functions exported by \code{package}.}
 
 \item{claims}{A function \verb{function(x, args)} returning \code{TRUE} when a data
-frame \code{x}, given with arguments named \code{args}, is this adviser's kind of
+frame \code{x}, given with arguments named \code{args}, is this advisor's kind of
 data (used by \code{\link[=advise]{advise()}} with \code{question = "auto"}). It must not evaluate
 the arguments, which may be bare column names.}
 
@@ -37,7 +37,7 @@ The registry entry, invisibly.
 }
 \description{
 A package that wants \code{\link[=tidyvisor]{tidyvisor()}} to advise on its analyses and interpret
-its results registers an \emph{adviser}, usually from its \code{.onLoad()}:
+its results registers an \emph{advisor}, usually from its \code{.onLoad()}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{.onLoad <- function(libname, pkgname) \{
   if (requireNamespace("tidyvisor", quietly = TRUE)) \{
@@ -53,6 +53,6 @@ its results registers an \emph{adviser}, usually from its \code{.onLoad()}:
 \}
 }\if{html}{\out{</div>}}
 
-Registering again under the same \code{package} replaces the earlier adviser,
+Registering again under the same \code{package} replaces the earlier advisor,
 so a package's own registration takes precedence over the built-in one.
 }
