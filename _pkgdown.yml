@@ -42,6 +42,9 @@ reference:
       - tidyvisor
       - advise
       - interpret
+  - title: Built-in advisers
+    contents:
+      - regression-advisor
   - title: Advisers from other packages
     contents:
       - advisors

@@ -14,5 +14,5 @@
     {"identifier": "https://github.com/jmozez/tidymapr", "relation": "isSupplementTo", "scheme": "url"}
   ],
   "language": "eng",
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

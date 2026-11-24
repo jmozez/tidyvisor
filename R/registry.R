@@ -79,9 +79,19 @@ tv_registry <- function() {
   tv_env$advisors[ok]
 }
 
-# Built-in advisers for the two companion packages, using the functions they
-# already export (tidydiversity and tidymapr 0.3.0 and later).
+# Built-in advisers: regression with lm() and glm(), and the two companion
+# packages through the functions they already export (tidydiversity and
+# tidymapr 0.3.0 and later).
 tv_register_builtin <- function() {
+  register_advisor(
+    package = "stats",
+    title = "Regression: linear and generalised linear models",
+    questions = "regression",
+    classes = c("glm", "lm"),
+    advise = tv_advise_regression,
+    interpret = tv_interpret_regression,
+    claims = function(x, args) "response" %in% args
+  )
   register_advisor(
     package = "tidydiversity",
     title = "Community ecology: ordination and its tests",
