@@ -176,6 +176,25 @@ tidyvisor(ord)
 #>   only approximate.
 ```
 
+## Statistical models
+
+Besides the ecology packages, tidyvisor advises on widely used models. Give
+data with a `question` (or the argument shown), or give it the fitted model.
+
+| Package | Question or argument | Fitted classes | What it adds |
+|---|---|---|---|
+| stats | `"regression"`, `response` | `lm`, `glm` | family from the response, overdispersion, effects as changes, rate or odds ratios |
+| lme4 | `"mixed"`, `random` | `lmerMod`, `glmerMod` | grouping-factor checks, random-effect SDs, intra-class correlation, singular fits |
+| glmmTMB | `"zero_inflation"` | `glmmTMB` | negative binomial and zero-inflated mixed models, structural zeros |
+| mgcv | `"smooth"`, `smooth` | `gam` | smooths by effective degrees of freedom, basis (`k`) and concurvity checks |
+| aods3 | `"overdispersion"` | `aodml`, `aodql` | beta-binomial and negative binomial models, the overdispersion parameter |
+
+```r
+tidyvisor(lme4::sleepstudy, response = "Reaction", predictors = "Days", random = "Subject")
+m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = lme4::sleepstudy)
+tidyvisor(m)
+```
+
 ## Which advisers are there?
 
 ``` r

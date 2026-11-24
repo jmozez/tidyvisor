@@ -45,6 +45,7 @@ reference:
   - title: Built-in advisers
     contents:
       - regression-advisor
+      - model-advisors
   - title: Advisers from other packages
     contents:
       - advisors

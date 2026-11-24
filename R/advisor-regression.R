@@ -199,15 +199,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
   odds_of <- yname
   if (is_glm && fam$family == "binomial") {
     yv <- stats::model.response(stats::model.frame(x))
-    odds_of <- if (is.factor(yv)) {
-      sprintf("%s = %s", yname, levels(yv)[2])
-    } else if (is.logical(yv)) {
-      sprintf("%s = TRUE", yname)
-    } else if (is.null(dim(yv))) {
-      sprintf("%s = 1", yname)
-    } else {
-      sprintf("success in %s", yname)
-    }
+    odds_of <- tv_odds_of(yv, yname)
   }
   est_disp <- !fam$family %in% c("poisson", "binomial")
   sm <- summary(x)
@@ -251,37 +243,10 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
   cf <- stats::coef(sm)
   cf <- cf[rownames(cf) != "(Intercept)", , drop = FALSE]
   crit <- if (!is_glm || est_disp) stats::qt(1 - (1 - level) / 2, stats::df.residual(x)) else stats::qnorm(1 - (1 - level) / 2)
-  lvl <- round(100 * level)
-  factor_terms <- names(x$xlevels)
-  eff <- character()
-  tab <- list()
-  for (term in rownames(cf)) {
-    b <- cf[term, 1]
-    se <- cf[term, 2]
-    p <- cf[term, 4]
-    lo <- b - crit * se
-    hi <- b + crit * se
-    fac <- factor_terms[startsWith(term, factor_terms)]
-    what <- if (length(fac)) {
-      sprintf("%s = %s (compared with %s = %s)", fac[1], substring(term, nchar(fac[1]) + 1), fac[1], x$xlevels[[fac[1]]][1])
-    } else {
-      sprintf("each one-unit increase in %s", term)
-    }
-    sentence <- switch(link,
-      identity = sprintf("%s: %s changes %s by %s (%d%% CI %s to %s), %s.", term, what, yname, tv_num(b), lvl, tv_num(lo), tv_num(hi), tv_p(p)),
-      log = sprintf("%s: %s multiplies the expected %s by %s (%s; %d%% CI %s to %s), %s.", term, what, yname, tv_num(exp(b)), tv_pct(exp(b)), lvl, tv_num(exp(lo)), tv_num(exp(hi)), tv_p(p)),
-      logit = sprintf("%s: %s multiplies the odds of %s by %s (odds ratio; %d%% CI %s to %s), %s.", term, what, odds_of, tv_num(exp(b)), lvl, tv_num(exp(lo)), tv_num(exp(hi)), tv_p(p)),
-      sprintf("%s: coefficient %s on the %s scale (%d%% CI %s to %s), %s.", term, tv_num(b), link, lvl, tv_num(lo), tv_num(hi), tv_p(p))
-    )
-    eff <- c(eff, sentence)
-    tab[[term]] <- tibble::tibble(term = term, estimate = b, std_error = se, lower = lo, upper = hi, p.value = p)
-  }
-  if (length(eff)) {
-    s$Effects <- c(
-      eff,
-      if (link %in% c("log", "logit")) "Effects on the log or logit scale are multiplicative: they combine by multiplying, and a factor of 1 means no effect.",
-      "Each effect is estimated with the other predictors held fixed."
-    )
+  e <- tv_effects(cf, crit, link, yname, odds_of, x$xlevels, level)
+  tab <- e$table
+  if (length(e$sentences)) {
+    s$Effects <- c(e$sentences, "Each effect is estimated with the other predictors held fixed.")
   }
 
   # ---- Diagnostics ----
@@ -343,7 +308,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
     "plot(model) shows four diagnostics: residuals against fitted values (look for curves or a funnel), the normal Q-Q plot, scale-location (spread against fitted values) and residuals against leverage (influential points).",
     "Plot each effect on the response scale, with its confidence band, rather than the coefficients alone."
   )
-  structure(list(sections = s, tables = list(coefficients = do.call(rbind, tab))), class = "tv_interpretation")
+  structure(list(sections = s, tables = list(coefficients = tab)), class = "tv_interpretation")
 }
 
 # ---- Helpers ----
@@ -467,4 +432,63 @@ print.tv_interpretation <- function(x, ...) {
   }
   invisible(x)
 }
+# Sentences for fixed effects. `cf` has columns estimate, std. error, statistic
+# and p-value (the layout of coef(summary()) for lm, glm, glmer, glmmTMB, gam).
+tv_effects <- function(cf, crit, link, yname, odds_of, xlevels, level) {
+  cf <- cf[rownames(cf) != "(Intercept)", , drop = FALSE]
+  lvl <- round(100 * level)
+  factor_terms <- names(xlevels)
+  eff <- character()
+  tab <- list()
+  for (term in rownames(cf)) {
+    b <- cf[term, 1]
+    se <- cf[term, 2]
+    p <- if (ncol(cf) >= 4) cf[term, 4] else 2 * stats::pnorm(-abs(b / se))
+    lo <- b - crit * se
+    hi <- b + crit * se
+    fac <- factor_terms[startsWith(term, factor_terms)]
+    what <- if (length(fac)) {
+      sprintf("%s = %s (compared with %s = %s)", fac[1], substring(term, nchar(fac[1]) + 1), fac[1], xlevels[[fac[1]]][1])
+    } else {
+      sprintf("each one-unit increase in %s", term)
+    }
+    sentence <- switch(link,
+      identity = sprintf("%s: %s changes %s by %s (%d%% CI %s to %s), %s.", term, what, yname, tv_num(b), lvl, tv_num(lo), tv_num(hi), tv_p(p)),
+      log = sprintf("%s: %s multiplies the expected %s by %s (%s; %d%% CI %s to %s), %s.", term, what, yname, tv_num(exp(b)), tv_pct(exp(b)), lvl, tv_num(exp(lo)), tv_num(exp(hi)), tv_p(p)),
+      logit = sprintf("%s: %s multiplies the odds of %s by %s (odds ratio; %d%% CI %s to %s), %s.", term, what, odds_of, tv_num(exp(b)), lvl, tv_num(exp(lo)), tv_num(exp(hi)), tv_p(p)),
+      sprintf("%s: coefficient %s on the %s scale (%d%% CI %s to %s), %s.", term, tv_num(b), link, lvl, tv_num(lo), tv_num(hi), tv_p(p))
+    )
+    eff <- c(eff, sentence)
+    tab[[term]] <- tibble::tibble(term = term, estimate = b, std_error = se, lower = lo, upper = hi, p.value = p)
+  }
+  if (length(eff) && link %in% c("log", "logit")) {
+    eff <- c(eff, "Effects on the log or logit scale are multiplicative: they combine by multiplying, and a factor of 1 means no effect.")
+  }
+  list(sentences = eff, table = do.call(rbind, tab))
+}
+
+# Outcome named in odds ratios of a binomial model
+tv_odds_of <- function(yv, yname) {
+  if (is.factor(yv)) {
+    sprintf("%s = %s", yname, levels(yv)[2])
+  } else if (is.logical(yv)) {
+    sprintf("%s = TRUE", yname)
+  } else if (is.null(dim(yv))) {
+    sprintf("%s = 1", yname)
+  } else {
+    tv_success_name(yname)
+  }
+}
+
+# The success column of a cbind(successes, failures) response
+tv_success_name <- function(yname) {
+  if (startsWith(yname, "cbind(")) sub("^cbind\\(\\s*([^,]+),.*$", "\\1", yname) else sprintf("success in %s", yname)
+}
+
+# Levels of the factor predictors in a model frame
+tv_xlevels <- function(mf) {
+  f <- mf[-1][vapply(mf[-1], function(v) is.factor(v) || is.character(v), TRUE)]
+  lapply(f, function(v) levels(as.factor(v)))
+}
+
 # nolint end

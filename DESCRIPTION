@@ -20,12 +20,17 @@ URL: https://github.com/jmozez/tidyvisor
 BugReports: https://github.com/jmozez/tidyvisor/issues
 Depends: 
     R (>= 4.1.0)
-Imports: 
+Imports:
+    methods, 
     cli (>= 3.6.0),
     rlang (>= 1.1.0),
     stats,
     tibble (>= 3.2.0)
 Suggests:
+    aods3,
+    glmmTMB,
+    lme4,
+    mgcv,
     MASS, 
     knitr,
     rmarkdown,

@@ -118,7 +118,10 @@ advise <- function(x, question = "auto", ...) {
 #' interpret(g)
 interpret <- function(x, ...) {
   regs <- tv_registry()
-  hit <- Filter(function(r) inherits(x, r$classes), regs)
+  # the adviser for the most specific class wins (a gam is also a glm)
+  cls <- if (isS4(x)) methods::is(x) else class(x)
+  rank <- vapply(regs, function(r) suppressWarnings(min(match(r$classes, cls), na.rm = TRUE)), 0)
+  hit <- regs[is.finite(rank)][order(rank[is.finite(rank)])]
   if (!length(hit)) {
     cli::cli_abort(c(
       "No adviser knows how to interpret an object of class {.cls {class(x)}}.",

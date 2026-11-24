@@ -79,7 +79,8 @@ tv_registry <- function() {
   tv_env$advisors[ok]
 }
 
-# Built-in advisers: regression with lm() and glm(), and the two companion
+# Built-in advisers: regression with lm() and glm(), lme4, glmmTMB, mgcv
+# and aods3, and the two companion
 # packages through the functions they already export (tidydiversity and
 # tidymapr 0.3.0 and later).
 tv_register_builtin <- function() {
@@ -90,7 +91,41 @@ tv_register_builtin <- function() {
     classes = c("glm", "lm"),
     advise = tv_advise_regression,
     interpret = tv_interpret_regression,
-    claims = function(x, args) "response" %in% args
+    claims = function(x, args) "response" %in% args && !any(c("random", "smooth") %in% args)
+  )
+  register_advisor(
+    package = "lme4",
+    title = "Mixed models: lmer() and glmer()",
+    questions = "mixed",
+    classes = "merMod",
+    advise = tv_advise_mixed,
+    interpret = tv_interpret_mixed,
+    claims = function(x, args) "random" %in% args && !"smooth" %in% args
+  )
+  register_advisor(
+    package = "glmmTMB",
+    title = "Mixed models for overdispersed and zero-inflated data: glmmTMB()",
+    questions = "zero_inflation",
+    classes = "glmmTMB",
+    advise = tv_advise_glmmtmb,
+    interpret = tv_interpret_mixed
+  )
+  register_advisor(
+    package = "mgcv",
+    title = "Additive models with smooth effects: gam()",
+    questions = "smooth",
+    classes = "gam",
+    advise = tv_advise_gam,
+    interpret = tv_interpret_gam,
+    claims = function(x, args) "smooth" %in% args
+  )
+  register_advisor(
+    package = "aods3",
+    title = "Overdispersed proportions and counts: aodml()",
+    questions = "overdispersion",
+    classes = c("aodml", "aodql"),
+    advise = tv_advise_aod,
+    interpret = tv_interpret_aod
   )
   register_advisor(
     package = "tidydiversity",

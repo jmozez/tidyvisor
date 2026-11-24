@@ -1,5 +1,20 @@
 # tidyvisor 0.2.0
 
+* New built-in advisers for four modelling packages, each with advice before
+  fitting and an interpretation after it:
+  - lme4 (`question = "mixed"`, or give `random`): checks the grouping
+    factors, chooses `lmer()`, `glmer()` or `glmer.nb()`, and explains fixed
+    effects, random-effect standard deviations, the intra-class correlation,
+    singular fits and convergence.
+  - glmmTMB (`question = "zero_inflation"`): negative binomial and
+    zero-inflated mixed models, with the probability of a structural zero.
+  - mgcv (`question = "smooth"`, or give `smooth`): additive models, each
+    smooth explained by its effective degrees of freedom, with basis (`k`)
+    and concurvity checks.
+  - aods3 (`question = "overdispersion"`): beta-binomial and negative
+    binomial models, with the overdispersion parameter explained.
+* `interpret()` uses the adviser for the most specific class, so a `gam`
+  (which is also a `glm`) goes to the mgcv adviser.
 * New built-in adviser for linear and generalised linear models
   (`question = "regression"`, and any fitted `lm` or `glm`). Before fitting,
   it chooses the family and link from the kind of response (continuous,
