@@ -1,7 +1,8 @@
 # Publish the pkgdown site to Vercel. pkgdown.yaml builds the site and pushes
 # it to the gh-pages branch; this workflow then deploys that branch.
-# Needs the repository secret VERCEL_TOKEN and the repository variable
-# VERCEL_PROJECT_ID (the id of the tidyvisor project on Vercel).
+# Needs the repository secret VERCEL_TOKEN. On the first run the Vercel
+# project "tidyvisor" is created in the team and linked, and the domain
+# tidyvisor.in4metrix.dev is added to it; later runs reuse them.
 on:
   workflow_run:
     workflows: [pkgdown.yaml]
@@ -18,8 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'jmozez/tidyvisor' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success') }}
     env:
-      VERCEL_ORG_ID: team_sQKBoVytwZq7ergPfB5Er8ZR
-      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      VERCEL_ORG: team_sQKBoVytwZq7ergPfB5Er8ZR
     steps:
       - uses: actions/checkout@v7
         with:
@@ -36,6 +36,12 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           if [ -z "$VERCEL_TOKEN" ]; then echo "::error::Add the VERCEL_TOKEN secret"; exit 1; fi
-          if [ -z "$VERCEL_PROJECT_ID" ]; then echo "::error::Add the VERCEL_PROJECT_ID repository variable"; exit 1; fi
           rm -rf docs/.git
-          npx --yes vercel@latest deploy --prod --yes --token="$VERCEL_TOKEN"
+          # Link to the project, creating it on the first run
+          npx --yes vercel@latest link --yes --project tidyvisor \
+            --scope "$VERCEL_ORG" --token="$VERCEL_TOKEN"
+          npx --yes vercel@latest deploy --prod --yes \
+            --scope "$VERCEL_ORG" --token="$VERCEL_TOKEN"
+          # Add the domain (an error only means it is already there)
+          npx --yes vercel@latest domains add tidyvisor.in4metrix.dev tidyvisor \
+            --scope "$VERCEL_ORG" --token="$VERCEL_TOKEN" || true
