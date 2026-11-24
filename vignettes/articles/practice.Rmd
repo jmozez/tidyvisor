@@ -1,5 +1,5 @@
 ---
-title: "Guide: research practice and study design"
+title: "1. Research practice and study design"
 ---
 
 ```{r, include = FALSE}

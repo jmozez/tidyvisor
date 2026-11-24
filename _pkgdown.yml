@@ -45,7 +45,7 @@ repo:
 navbar:
   bg: dark
   structure:
-    left: [intro, userguide, reference, news]
+    left: [intro, userguide, tutorials, reference, news]
     right: [tidydiversity, tidymapr, search, github]
   components:
     github:
@@ -68,12 +68,35 @@ navbar:
     userguide:
       text: User guide
       menu:
+        - text: Overview
+          href: articles/user-guide.html
+        - text: -------
         - text: 1. Research practice and study design
           href: articles/practice.html
         - text: 2. Power analysis before fieldwork
           href: articles/power.html
         - text: 3. Checking assumptions and choosing the test
           href: articles/assumptions.html
+        - text: 4. Regression and generalised linear models
+          href: articles/regression.html
+        - text: 5. Mixed, additive and overdispersed models
+          href: articles/mixed.html
+        - text: 6. Bayesian models
+          href: articles/bayesian.html
+        - text: 7. Community and spatial ecology
+          href: articles/ecology.html
+        - text: 8. Writing your own advisor
+          href: articles/extending.html
+    tutorials:
+      text: Tutorials
+      menu:
+        - text: Overview
+          href: articles/tutorials.html
+        - text: -------
+        - text: A diet experiment, from plan to report
+          href: articles/tutorial-experiment.html
+        - text: Comparing treatments with counts
+          href: articles/tutorial-counts.html
     news:
       text: News
       href: news/index.html
@@ -119,9 +142,20 @@ articles:
       - tidyvisor
   - title: User guide
     contents:
+      - articles/user-guide
       - articles/practice
       - articles/power
       - articles/assumptions
+      - articles/regression
+      - articles/mixed
+      - articles/bayesian
+      - articles/ecology
+      - articles/extending
+  - title: Tutorials
+    contents:
+      - articles/tutorials
+      - articles/tutorial-experiment
+      - articles/tutorial-counts
 
 footer:
   structure:

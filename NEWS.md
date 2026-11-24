@@ -1,5 +1,10 @@
 # tidyvisor (development version)
 
+* Website: a full user guide in eight chapters (research practice, power,
+  assumptions, regression, mixed and additive models, Bayesian models,
+  community and spatial ecology, writing an advisor) and two tutorials
+  that follow whole studies from the question to the report.
+
 * tidyvisor is now a general statistical advisor for any field:
   - `tv_practice()`: good research practice for planning, data collection,
     analysis and reporting, by kind of study, with the reporting guideline

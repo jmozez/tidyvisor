@@ -1,5 +1,5 @@
 ---
-title: "Guide: checking assumptions and choosing the test"
+title: "3. Checking assumptions and choosing the test"
 ---
 
 ```{r, include = FALSE}
