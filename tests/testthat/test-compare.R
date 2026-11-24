@@ -51,3 +51,32 @@ test_that("regression advice is unchanged without a group", {
   a <- advise(mtcars, response = "mpg", predictors = "wt")
   expect_identical(a$question, "regression")
 })
+
+test_that("power analysis gives sizes and sensitivity", {
+  p <- tv_power("two_groups", delta = 5, sd = 8)
+  expect_equal(p$n, ceiling(power.t.test(delta = 5, sd = 8, power = 0.8)$n))
+  expect_true(any(p$checks$check == "If the effect is half as large"))
+  s <- tv_power("sites", delta = 5, sd = 8, icc = 0.2, per_site = 5)
+  expect_gt(s$n * 5, p$n)
+  expect_match(s$advice$recommendation[2], "more sites")
+  for (d in list(
+    list("counts", mean1 = 4, ratio = 1.5, theta = 2),
+    list("groups", means = c(10, 12, 14), sd = 5),
+    list("proportions", p1 = 0.2, p2 = 0.4),
+    list("regression", r2 = 0.1, predictors = 3),
+    list("correlation", r = 0.3),
+    list("paired", delta = 2, sd = 4)
+  )) {
+    expect_gt(do.call(tv_power, d)$n, 1)
+  }
+  expect_error(tv_power("two_groups", delta = 5), "needs")
+})
+
+test_that("power from pilot data", {
+  a <- advise(PlantGrowth, question = "power", response = "weight", group = "group", delta = 0.5)
+  expect_identical(a$question, "power")
+  expect_match(a$checks$meaning[1], "SD")
+  expect_error(advise(PlantGrowth, question = "power", response = "weight"), "effect")
+  c <- advise(InsectSprays, question = "power", response = "count", ratio = 1.5)
+  expect_true(any(grepl("counts", c$checks$value)))
+})

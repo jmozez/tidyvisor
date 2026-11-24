@@ -12,3 +12,4 @@
 ^\.zenodo\.json$
 ^tidyvisor\.Rcheck$
 ^tidyvisor.*\.tar\.gz$
+^vignettes/articles$

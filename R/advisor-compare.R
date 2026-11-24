@@ -1,3 +1,5 @@
+# nolint start: line_length_linter. Tables and advice sentences read better unbroken.
+
 #' Advisor for comparing groups: assumptions and what to do when they fail
 #'
 #' @description
@@ -60,8 +62,6 @@
 #' tidyvisor(InsectSprays, response = "count", group = "spray")
 #' tidyvisor(kruskal.test(count ~ spray, data = InsectSprays))
 NULL
-
-# nolint start: line_length_linter. Advice sentences read better unbroken.
 
 #' @rdname compare-advisor
 #' @export
@@ -185,6 +185,7 @@ tv_advise_compare <- function(x, question = "compare", response, group, paired =
   }
 
   alts <- list(
+    if (!is.null(paired)) step("Alternative", "Paired t-test", "The classical test on the within-pair differences; fine when they are close to normal or there are 30 or more pairs.", student),
     step("Alternative", "Non-parametric: rank test", "Makes no assumption about the shape of the distributions; answers whether values in one group tend to be larger.", rank),
     step("Alternative", "Robust: trimmed means", "Resists outliers and heavy tails while still comparing a centre.", robust),
     if (positive && is.null(paired)) step("Alternative", "Transform: log scale", "For positive, right-skewed data; compares geometric means (ratios).", logt),
