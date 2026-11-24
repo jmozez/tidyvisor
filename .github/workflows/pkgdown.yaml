@@ -89,6 +89,7 @@ jobs:
 
       # The built site lives on the gh-pages branch, not on main, so the
       # GitHub tarball that pak downloads holds only the package.
+      # vercel.yaml publishes gh-pages to Vercel after this job succeeds.
       - name: Deploy to the gh-pages branch
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@fa24774553152dd7873cd16ebd8d959b010c5445 # v4.9.0

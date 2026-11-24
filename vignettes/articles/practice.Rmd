@@ -1,0 +1,112 @@
+---
+title: "Guide: research practice and study design"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+Most problems that statistics cannot fix are made before the analysis:
+too few independent replicates, a treatment confounded with time, raw data
+edited by hand, an analysis chosen after seeing the data. tidyvisor gives
+advice for every stage of a study, in any field.
+
+```{r}
+library(tidyvisor)
+```
+
+## A checklist for each stage
+
+`tv_practice()` gives a checklist for a stage (`"plan"`, `"collect"`,
+`"analyse"`, `"report"` or `"all"`) and a kind of study (`"experiment"`,
+`"observational"`, `"survey"`, `"monitoring"`, `"review"`).
+
+```{r}
+tv_practice("plan", design = "observational")
+```
+
+```{r}
+tv_practice("collect")
+```
+
+```{r}
+tv_practice("analyse")
+```
+
+## Reporting guidelines by field
+
+Most fields have a reporting guideline: a checklist of what a paper must
+state so that readers can judge and repeat the work. Give `field`:
+
+```{r}
+tv_practice("report", field = "sdm")$advice[1, ]
+tv_practice("report", field = "animal")$advice[1, ]
+tv_practice("report", design = "experiment", field = "trial")$advice[1, ]
+```
+
+| `field` | Guideline |
+|---|---|
+| `"trial"` | CONSORT 2010 (randomised trials) |
+| `"epidemiology"`, `"medicine"` | STROBE (observational studies) |
+| `"animal"` | ARRIVE 2.0 (animal research) |
+| `"review"` | PRISMA 2020 (systematic reviews and meta-analyses) |
+| `"diagnostic"` | STARD 2015 (diagnostic accuracy) |
+| `"sdm"` | ODMAP (species distribution models) |
+| `"ecology"` | Tools for Transparency in Ecology and Evolution |
+| anything else | the EQUATOR Network lists the guideline for each kind of study |
+
+## Auditing a data set
+
+Before the analysis, `advise(data, question = "design")` audits the data:
+missing values, duplicated rows, constant columns, numbers stored as text,
+extreme values, and, given the design, the unit of replication and
+confounding.
+
+### Pseudoreplication
+
+The commonest design error in field and laboratory studies is treating
+repeated measurements of one unit as independent replicates (Hurlbert
+1984). In `ChickWeight`, each chick received one diet and was weighed up
+to 12 times: there are 50 replicates, not 578.
+
+```{r}
+tidyvisor(ChickWeight, question = "design", response = "weight",
+          group = "Diet", unit = "Chick", time = "Time")
+```
+
+### Missing values
+
+`airquality` has gaps in the ozone and solar radiation records. The audit
+reports them and asks why they are missing before any rows are dropped:
+
+```{r}
+advise(airquality, question = "design", response = "Ozone")
+```
+
+### When nothing else applies
+
+When no specialised advisor recognises the data, `tidyvisor()` falls back
+on this audit, so it always answers:
+
+```{r}
+tidyvisor(iris)$checks
+```
+
+## References
+
+Hurlbert, S. H. (1984). Pseudoreplication and the design of ecological
+field experiments. *Ecological Monographs* 54, 187-211.
+
+Nosek, B. A., Ebersole, C. R., DeHaven, A. C. and Mellor, D. T. (2018).
+The preregistration revolution. *Proceedings of the National Academy of
+Sciences* 115, 2600-2606.
+
+Wasserstein, R. L. and Lazar, N. A. (2016). The ASA statement on p-values:
+context, process, and purpose. *The American Statistician* 70, 129-133.
+
+Wilkinson, M. D. et al. (2016). The FAIR Guiding Principles for scientific
+data management and stewardship. *Scientific Data* 3, 160018.
+
+Zuur, A. F., Ieno, E. N. and Elphick, C. S. (2010). A protocol for data
+exploration to avoid common statistical problems. *Methods in Ecology and
+Evolution* 1, 3-14.

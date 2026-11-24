@@ -1,7 +1,19 @@
-url: https://github.com/jmozez/tidyvisor
+url: https://tidyvisor.in4metrix.dev/
 
 template:
   bootstrap: 5
+  includes:
+    # Readers can switch the site between light and dark (light-switch
+    # below); plots keep a white background in both (extra.css).
+    # The CSP allows only the site's own scripts; static hosting cannot
+    # always send security headers, so they are set as meta tags.
+    in_header: |
+      <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+      <meta name="referrer" content="strict-origin-when-cross-origin">
+  opengraph:
+    image:
+      src: man/figures/logo.png
+      alt: "tidyvisor hex logo"
   light-switch: true
   bslib:
     primary: "#1A9E93"
@@ -9,39 +21,72 @@ template:
     base_font: {google: "Inter"}
     heading_font: {google: "Inter"}
     code_font: {google: "JetBrains Mono"}
-    navbar-bg: "#0E2A47"
+    font-size-base: 1rem
+    line-height-base: 1.65
+    headings-font-weight: 700
     link-color: "#13857B"
+    navbar-bg: "#0E2A47"
     border-radius: 0.5rem
 
+# Every figure on an opaque white background so no plot ever shows the
+# dark theme through it.
 figures:
   bg: white
   dev.args:
     bg: white
 
+repo:
+  url:
+    home: https://github.com/jmozez/tidyvisor/
+    source: https://github.com/jmozez/tidyvisor/blob/main/
+    issue: https://github.com/jmozez/tidyvisor/issues/
+  branch: main
+
 navbar:
   bg: dark
   structure:
-    left: [articles, reference, news]
+    left: [intro, userguide, reference, news]
     right: [tidydiversity, tidymapr, search, github]
   components:
-    tidydiversity:
-      text: tidydiversity
-      href: https://tidydiversity.in4metrix.dev/
-    tidymapr:
-      text: tidymapr
-      icon: fa-map
-      href: https://tidymapr.in4metrix.dev/
     github:
       icon: fa-github
       aria-label: Source code on GitHub
       href: https://github.com/jmozez/tidyvisor
+    tidydiversity:
+      text: tidydiversity
+      icon: fa-leaf
+      aria-label: Community ecology with the companion package tidydiversity
+      href: https://tidydiversity.in4metrix.dev/
+    tidymapr:
+      text: tidymapr
+      icon: fa-map
+      aria-label: Spatial ecology with the companion package tidymapr
+      href: https://tidymapr.in4metrix.dev/
+    intro:
+      text: Get started
+      href: articles/tidyvisor.html
+    userguide:
+      text: User guide
+      menu:
+        - text: 1. Research practice and study design
+          href: articles/practice.html
+        - text: 2. Power analysis before fieldwork
+          href: articles/power.html
+        - text: 3. Checking assumptions and choosing the test
+          href: articles/assumptions.html
+    news:
+      text: News
+      href: news/index.html
 
-articles:
-  - title: Guides
-    navbar: Guides
-    contents:
-      - articles/assumptions
-      - articles/power
+home:
+  title: "tidyvisor: a statistical advisor for research in R"
+  description: >
+    A chief statistician for R: advice on study design, sample size and
+    research practice before the data are collected, on the analysis and
+    its assumptions before it is run, and plain-language interpretation of
+    the results after it, with the reasons and the code.
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
 
 reference:
   - title: The advisor
@@ -49,15 +94,36 @@ reference:
       - tidyvisor
       - advise
       - interpret
-  - title: Built-in advisors
+  - title: Research practice, design and power
+    contents:
+      - practice-advisor
+      - power-advisor
+  - title: Statistical models and tests
     contents:
       - regression-advisor
-      - model-advisors
-      - vegan-advisor
-      - brms-advisor
       - compare-advisor
-      - power-advisor
+      - model-advisors
+      - brms-advisor
+  - title: Community ecology
+    contents:
+      - vegan-advisor
   - title: Advisors from other packages
     contents:
       - advisors
       - register_advisor
+
+articles:
+  - title: Get started
+    navbar: ~
+    contents:
+      - tidyvisor
+  - title: User guide
+    contents:
+      - articles/practice
+      - articles/power
+      - articles/assumptions
+
+footer:
+  structure:
+    left: [developed_by]
+    right: [built_with]

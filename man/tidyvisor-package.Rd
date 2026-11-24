@@ -3,15 +3,16 @@
 \docType{package}
 \name{tidyvisor-package}
 \alias{tidyvisor-package}
-\title{tidyvisor: A Statistical Advisor for Tidy Ecological Analyses}
+\title{tidyvisor: A Statistical Advisor for Research: Design, Analysis and Interpretation}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Advice before the analysis and interpretation after it, shared by a family of ecological packages. Given data and a question, 'tidyvisor' recommends the analysis, the test and the plots, checks the data for the usual pitfalls and gives the code to run; given a fitted result, it explains the numbers and the figure in plain sentences, with its reasons, so the advice can be checked and overruled. The knowledge lives in the packages that do the analyses, each of which registers an advisor: 'tidydiversity' for community ecology (which ordination and which test) and 'tidymapr' for spatial ecology (species distributions, the spread of invasions and epidemics, range shifts and spatial autocorrelation).
+A chief statistician for R. Before the data are collected, 'tidyvisor' advises on study design, the unit of replication, sample size (power analysis) and good research practice, with the reporting guideline for the field. Given data and a question, it audits the data, checks the assumptions of the candidate analyses and recommends the analysis, the test and the plots, with the code to run and what to do when assumptions fail. Given a fitted result, it explains the numbers in plain sentences, with its reasons, so the advice can be checked and overruled. Specialised knowledge lives in the packages that do the analyses, each of which registers an advisor: 'tidydiversity' for community ecology and 'tidymapr' for spatial ecology.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://tidyvisor.in4metrix.dev/}
   \item \url{https://github.com/jmozez/tidyvisor}
   \item Report bugs at \url{https://github.com/jmozez/tidyvisor/issues}
 }

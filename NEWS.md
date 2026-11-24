@@ -1,5 +1,22 @@
 # tidyvisor (development version)
 
+* tidyvisor is now a general statistical advisor for any field:
+  - `tv_practice()`: good research practice for planning, data collection,
+    analysis and reporting, by kind of study, with the reporting guideline
+    for the field (CONSORT, STROBE, ARRIVE, PRISMA, STARD, ODMAP, TTEE).
+  - `advise(data, question = "design")`: a data audit (missing values,
+    duplicated rows, constant columns, numbers stored as text, the unit of
+    replication and pseudoreplication, treatments confounded with time,
+    unbalanced groups) with the suggested analysis. `tidyvisor()` falls
+    back on it when no specialised advisor recognises the data, so it
+    always answers.
+* A website at <https://tidyvisor.in4metrix.dev/>, laid out like those of
+  tidydiversity and tidymapr, with a Get started page and three guides:
+  research practice and study design, power analysis, and assumption
+  checks.
+* README: installation lists tidyvisor first, then tidydiversity and
+  tidymapr, saying what each does.
+
 * Power analysis before fieldwork: `tv_power()`, or `advise(pilot,
   question = "power", ...)` with pilot data. It gives the samples, traps,
   pairs, observations or sites needed to detect a given effect, for two or
