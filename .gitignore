@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck
+tidyvisor_*.tar.gz
+tests/testthat/Rplots.pdf
+# The website is built by CI and kept on the gh-pages branch
+docs/

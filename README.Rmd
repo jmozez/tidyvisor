@@ -1,0 +1,87 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+# tidyvisor <img src="man/figures/logo.png" align="right" height="139" alt="tidyvisor hex logo" />
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/jmozez/tidyvisor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jmozez/tidyvisor/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+**tidyvisor** is a statistical adviser for ecological analyses. Before an
+analysis, give it your data and your question: it checks the data for the
+usual pitfalls and recommends the analysis, the test and the plots, with the
+code to run. After the analysis, give it the result: it explains the numbers
+and the figure in plain sentences.
+
+It always gives its reasons, so its advice can be checked and overruled. The
+question, which only you know, comes first.
+
+## One adviser, many packages
+
+The knowledge lives in the packages that do the analyses. Each registers an
+*adviser* with tidyvisor, and one `tidyvisor()` serves them all:
+
+| Package | Field | Advises on |
+|---|---|---|
+| [tidydiversity](https://tidydiversity.in4metrix.dev/) | Community ecology | Which ordination: unconstrained or constrained, linear or unimodal; which test; ordinations, principal response curves and variation partitioning |
+| [tidymapr](https://tidymapr.in4metrix.dev/) | Spatial ecology | Species distribution models, the spread of invasions, epidemic growth and R, range shifts, spatial autocorrelation |
+
+Other packages can join with `register_advisor()`.
+
+## Installation
+
+```r
+# install.packages("remotes")
+remotes::install_github("jmozez/tidyvisor")
+
+# and the packages it advises on
+remotes::install_github("jmozez/tidydiversity")
+remotes::install_github("jmozez/tidymapr")
+```
+
+## Before the analysis: which analysis?
+
+Community data, with abundances and a question about site variables, go to
+the tidydiversity adviser:
+
+```{r advise, eval = rlang::is_installed(c("tidydiversity", "vegan"))}
+library(tidyvisor)
+frogs <- tidydiversity::png_frogs
+tidyvisor(frogs, abundance = abundance)
+```
+
+Case counts and a question about an epidemic go to the tidymapr adviser:
+
+```{r epidemic, eval = rlang::is_installed("tidymapr")}
+cases <- data.frame(
+  week = seq(as.Date("2024-01-01"), by = "week", length.out = 12),
+  n = c(2, 3, 5, 4, 9, 12, 15, 24, 30, 41, 60, 77)
+)
+tidyvisor(cases, question = "epidemic", date = "week", cases = "n")
+```
+
+## After the analysis: what does it show?
+
+```{r interpret, eval = rlang::is_installed(c("tidydiversity", "vegan"))}
+ord <- tidydiversity::ord_fit(frogs,
+  abundance = abundance, method = "pca", transform = "hellinger"
+)
+tidyvisor(ord)
+```
+
+## Which advisers are there?
+
+```{r advisors}
+advisors()
+```
+
+## Citation
+
+Please cite tidyvisor as described in `citation("tidyvisor")` and
+[`CITATION.cff`](CITATION.cff).

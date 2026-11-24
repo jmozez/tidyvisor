@@ -1,0 +1,18 @@
+{
+  "title": "tidyvisor: A Statistical Adviser for Tidy Ecological Analyses",
+  "upload_type": "software",
+  "description": "<p>tidyvisor is an R package that gives advice before an ecological analysis and explains the results after it, in plain sentences and with its reasons. It is shared by tidydiversity (community ecology) and tidymapr (spatial ecology), which register their advisers with it.</p>",
+  "creators": [
+    {"name": "Moses, Jimmy", "affiliation": "School of Forestry, Faculty of Natural Resources, Papua New Guinea University of Technology, Private Mail Bag, Lae 411, Morobe Province, Papua New Guinea", "orcid": "0000-0003-3342-2384"}
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "keywords": ["R", "ecology", "statistics", "ordination", "spatial ecology"],
+  "related_identifiers": [
+    {"identifier": "https://github.com/jmozez/tidyvisor", "relation": "isSupplementTo", "scheme": "url"},
+    {"identifier": "https://github.com/jmozez/tidydiversity", "relation": "isSupplementTo", "scheme": "url"},
+    {"identifier": "https://github.com/jmozez/tidymapr", "relation": "isSupplementTo", "scheme": "url"}
+  ],
+  "language": "eng",
+  "version": "0.1.0"
+}

@@ -1,0 +1,14 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.lintr$
+^inst/logo$
+^CITATION\.cff$
+^\.zenodo\.json$
+^tidyvisor\.Rcheck$
+^tidyvisor.*\.tar\.gz$

@@ -1,0 +1,48 @@
+url: https://github.com/jmozez/tidyvisor
+
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    primary: "#1A9E93"
+    secondary: "#0E2A47"
+    base_font: {google: "Inter"}
+    heading_font: {google: "Inter"}
+    code_font: {google: "JetBrains Mono"}
+    navbar-bg: "#0E2A47"
+    link-color: "#13857B"
+    border-radius: 0.5rem
+
+figures:
+  bg: white
+  dev.args:
+    bg: white
+
+navbar:
+  bg: dark
+  structure:
+    left: [reference, news]
+    right: [tidydiversity, tidymapr, search, github]
+  components:
+    tidydiversity:
+      text: tidydiversity
+      href: https://tidydiversity.in4metrix.dev/
+    tidymapr:
+      text: tidymapr
+      icon: fa-map
+      href: https://tidymapr.in4metrix.dev/
+    github:
+      icon: fa-github
+      aria-label: Source code on GitHub
+      href: https://github.com/jmozez/tidyvisor
+
+reference:
+  - title: The adviser
+    contents:
+      - tidyvisor
+      - advise
+      - interpret
+  - title: Advisers from other packages
+    contents:
+      - advisors
+      - register_advisor

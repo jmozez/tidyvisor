@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 600" width="520" height="600">
+  <!-- tidyvisor hex logo. Same family as tidydiversity and tidymapr:
+       navy field, teal rim, gold accents, white name. The speech bubble is
+       the adviser; the compass inside it is the guidance; the tree
+       (tidydiversity) and the map pin (tidymapr) are the packages it serves,
+       joined to the bubble. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#14365A"/><stop offset="1" stop-color="#0B2340"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F3CF7A"/><stop offset="1" stop-color="#C99A3E"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3CC8B9"/><stop offset="1" stop-color="#1A9E93"/>
+    </linearGradient>
+    <clipPath id="hex"><path d="M260 14 L506 156 L506 444 L260 586 L14 444 L14 156 Z"/></clipPath>
+  </defs>
+
+  <!-- Hexagon and rim -->
+  <path d="M260 14 L506 156 L506 444 L260 586 L14 444 L14 156 Z" fill="url(#bg)"/>
+
+  <g clip-path="url(#hex)">
+    <!-- Links from the two packages to the adviser -->
+    <g fill="none" stroke="#7FA4C8" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 11">
+      <path d="M98 292 C100 270 112 254 128 246"/>
+      <path d="M422 268 C422 258 416 250 404 246"/>
+    </g>
+
+    <!-- Speech bubble: the adviser -->
+    <path d="M260 92 C346 92 400 140 400 205 C400 270 346 318 270 318 L252 318 L218 352 L222 314 C164 304 120 262 120 205 C120 140 174 92 260 92 Z"
+          fill="#102C4C" stroke="url(#teal)" stroke-width="9" stroke-linejoin="round"/>
+
+    <!-- Compass inside the bubble: the guidance -->
+    <circle cx="260" cy="205" r="72" fill="none" stroke="#2E5F8A" stroke-width="5"/>
+    <g stroke="#7FA4C8" stroke-width="4" stroke-linecap="round">
+      <path d="M260 133 V147 M260 263 V277 M188 205 H202 M318 205 H332"/>
+    </g>
+    <!-- Needle pointing up and to the right: the way forward -->
+    <g transform="rotate(40 260 205)">
+      <path d="M260 141 L276 205 L244 205 Z" fill="url(#gold)"/>
+      <path d="M260 269 L276 205 L244 205 Z" fill="#DCE6F0"/>
+    </g>
+    <circle cx="260" cy="205" r="9" fill="#0B2340" stroke="url(#gold)" stroke-width="4"/>
+
+    <!-- tidydiversity: a small phylogenetic tree -->
+    <g fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M98 300 V316 M98 316 H72 V334 M98 316 H124 V334"/>
+      <path d="M72 334 H60 V356 M72 334 H84 V356 M124 334 H112 V356 M124 334 H136 V356"/>
+    </g>
+
+    <!-- tidymapr: a map pin over contour lines -->
+    <g fill="none" stroke-linecap="round">
+      <path d="M380 352 C396 344 424 344 440 352" stroke="#7FA4C8" stroke-width="4"/>
+      <path d="M372 364 C394 356 426 356 448 364" stroke="#2E5F8A" stroke-width="4"/>
+    </g>
+    <path d="M410 344 C410 344 386 318 386 302 C386 288 397 278 410 278 C423 278 434 288 434 302 C434 318 410 344 410 344 Z"
+          fill="url(#gold)"/>
+    <circle cx="410" cy="302" r="8" fill="#0B2340"/>
+
+    <!-- Name -->
+    <text x="260" y="452" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+          font-weight="800" font-size="76" fill="#FFFFFF" letter-spacing="-1">tidyvisor</text>
+    <rect x="196" y="478" width="128" height="7" rx="3.5" fill="#2BB3A6"/>
+  </g>
+
+  <!-- Rim drawn last so it sits over the artwork -->
+  <path d="M260 14 L506 156 L506 444 L260 586 L14 444 L14 156 Z" fill="none" stroke="url(#teal)" stroke-width="18" stroke-linejoin="round"/>
+</svg>
