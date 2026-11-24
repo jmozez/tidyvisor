@@ -1,0 +1,124 @@
+---
+title: "Guide: checking assumptions and choosing the test"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+Every classical test makes assumptions. The t-test and ANOVA assume
+roughly normal data with similar spread in each group; a linear model
+assumes the same of its residuals. When the assumptions fail, there is
+almost always a better analysis: a transformation, a robust method, a
+rank test or a model with the right family. tidyvisor checks the
+assumptions, recommends the analysis they support and gives the code.
+
+```{r}
+library(tidyvisor)
+```
+
+## Before the test: which test?
+
+Give the data, the response and the grouping column. Two classic data
+sets show the two ends of the scale.
+
+### Sleep: the assumptions hold
+
+The `sleep` data record the extra hours of sleep of 10 people under each
+of two drugs.
+
+```{r}
+tidyvisor(sleep, response = "extra", group = "group")
+```
+
+Both groups look close to normal with similar spread, so the t-test is
+fine; Welch's version is shown too, as the safer default. The same
+people took both drugs, so the right analysis is paired:
+
+```{r}
+tidyvisor(sleep, response = "extra", group = "group", paired = "ID")
+```
+
+With `paired`, the checks are on the within-person differences. They
+are right-skewed with one outlier, so tidyvisor recommends a robust test
+on trimmed means, with the paired t-test and the Wilcoxon signed-rank
+test as alternatives.
+
+### Insect sprays: the assumptions fail
+
+`InsectSprays` counts insects on plots treated with six sprays.
+
+```{r}
+tidyvisor(InsectSprays, response = "count", group = "spray")
+```
+
+The checks show what a box plot would: two groups are right-skewed, the
+spreads differ more than threefold, and the response is counts. An ANOVA
+on these data would be unreliable. A log transformation is the textbook
+fix, but counts with zeros need `log(y + 1)`, which biases the estimates
+(O'Hara and Kotze 2010); a count GLM models the variance growing with the
+mean directly, so tidyvisor recommends a negative binomial GLM. A rank
+test (Kruskal-Wallis) and a robust test are listed as alternatives.
+
+### What the checks mean
+
+| Check | What it detects | Remedy |
+|---|---|---|
+| Shapiro-Wilk per group, skewness | non-normal data | log scale for positive right-skewed data; rank or permutation test; with 30 or more per group, tests on means usually still hold |
+| SD ratio, Fligner-Killeen test | unequal spread | Welch's tests; a log scale or Gamma GLM if the spread grows with the mean |
+| Robust z above 3.5 | outliers | trimmed means (Yuen), robust regression |
+| Whole numbers from 0 | counts | Poisson or negative binomial GLM |
+
+Assumption tests answer "can the data rule out the assumption?", not
+"does the violation matter?". With large samples they flag trivial
+departures, with small ones they miss serious ones. tidyvisor therefore
+weighs them together with skewness, the ratio of spreads and group sizes,
+and always starts with "plot the data".
+
+## After the test: what does it say, and what next?
+
+Any classical test result can be explained:
+
+```{r}
+tidyvisor(kruskal.test(count ~ spray, data = InsectSprays))
+```
+
+```{r}
+tidyvisor(shapiro.test(InsectSprays$count))
+```
+
+## After a model: what to do when the residuals fail
+
+For a linear model, the interpretation ends with what to do next, chosen
+by the checks that failed. Here a model of the insect counts:
+
+```{r}
+m <- lm(count ~ spray, data = InsectSprays)
+tidyvisor(m)$sections[["What to do next"]]
+```
+
+and a positive, right-skewed response whose spread grows with the mean,
+for which a log scale or a Gamma GLM is the remedy:
+
+```{r}
+set.seed(2)
+d <- data.frame(x = runif(80, 1, 10))
+d$y <- exp(0.3 * d$x + rnorm(80, 0, 0.6))
+tidyvisor(lm(y ~ x, data = d))$sections[["What to do next"]]
+```
+
+## References
+
+Delacre, M., Lakens, D. and Leys, C. (2017). Why psychologists should by
+default use Welch's t-test instead of Student's t-test. *International
+Review of Social Psychology* 30, 92-101.
+
+Fagerland, M. W. (2012). t-tests, non-parametric tests, and large
+studies: a paradox of statistical practice? *BMC Medical Research
+Methodology* 12, 78.
+
+O'Hara, R. B. and Kotze, D. J. (2010). Do not log-transform count data.
+*Methods in Ecology and Evolution* 1, 118-122.
+
+Wilcox, R. R. (2017). *Introduction to Robust Estimation and Hypothesis
+Testing*, fourth edition. Academic Press.

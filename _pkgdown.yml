@@ -21,7 +21,7 @@ figures:
 navbar:
   bg: dark
   structure:
-    left: [reference, news]
+    left: [articles, reference, news]
     right: [tidydiversity, tidymapr, search, github]
   components:
     tidydiversity:
@@ -36,6 +36,13 @@ navbar:
       aria-label: Source code on GitHub
       href: https://github.com/jmozez/tidyvisor
 
+articles:
+  - title: Guides
+    navbar: Guides
+    contents:
+      - articles/assumptions
+      - articles/power
+
 reference:
   - title: The advisor
     contents:
@@ -48,6 +55,8 @@ reference:
       - model-advisors
       - vegan-advisor
       - brms-advisor
+      - compare-advisor
+      - power-advisor
   - title: Advisors from other packages
     contents:
       - advisors

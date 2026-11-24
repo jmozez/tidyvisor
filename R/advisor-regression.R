@@ -251,6 +251,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
 
   # ---- Diagnostics ----
   diag <- character()
+  flag <- list()
   if (is_glm && fam$family %in% c("poisson", "binomial")) {
     binary <- fam$family == "binomial" && all(stats::weights(x, "prior") == 1) && all(x$y %in% c(0, 1))
     if (!binary && x$df.residual > 0) {
@@ -272,6 +273,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
     r <- stats::residuals(x)
     if (n >= 3 && n <= 5000) {
       sw <- stats::shapiro.test(r)
+      flag$nonnormal <- sw$p.value < 0.05
       diag <- c(diag, sprintf(
         "Normality of residuals (Shapiro-Wilk): W = %.3f, %s%s", sw$statistic, tv_p(sw$p.value),
         if (sw$p.value < 0.05) "; the residuals depart from normality: look at the Q-Q plot, and consider a transformation or another family." else "."
@@ -279,6 +281,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
     }
     bp <- tv_breusch_pagan(x)
     if (!is.null(bp)) {
+      flag$hetero <- bp$p < 0.05
       diag <- c(diag, sprintf(
         "Constant variance (Breusch-Pagan): chi-squared = %.2f on %d df, %s%s", bp$stat, bp$df, tv_p(bp$p),
         if (bp$p < 0.05) "; the spread of the residuals changes with the fitted values: consider a log or Gamma model, or robust standard errors." else "."
@@ -289,6 +292,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
   cd <- cd[is.finite(cd)]
   if (length(cd)) {
     top <- max(cd)
+    flag$influence <- top > 1
     diag <- c(diag, if (top > 1) {
       sprintf("Influence: row %s has Cook's distance %.2f (above 1), so it alone changes the fit noticeably; refit without it to see whether the conclusions hold.", names(which.max(cd)), top)
     } else {
@@ -297,12 +301,16 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
   }
   vif <- tv_vif(x)
   if (length(vif) && max(vif) > 5) {
+    flag$collinear <- TRUE
     diag <- c(diag, sprintf(
       "Collinearity: variance inflation factor of %s is %.1f (above 5); its effect is hard to separate from the others.",
       names(which.max(vif)), max(vif)
     ))
   }
   s$Diagnostics <- if (length(diag)) diag else "No problems found by the checks run."
+  if (!is_glm || fam$family == "gaussian") {
+    s$`What to do next` <- tv_lm_remedies(x, flag)
+  }
 
   s$`Reading the plots` <- c(
     "plot(model) shows four diagnostics: residuals against fitted values (look for curves or a funnel), the normal Q-Q plot, scale-location (spread against fitted values) and residuals against leverage (influential points).",
@@ -312,6 +320,52 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
 }
 
 # ---- Helpers ----
+
+# Remedies for a linear model whose assumptions fail, in order of what to
+# try first; each names the code to run.
+tv_lm_remedies <- function(m, flag) {
+  y <- stats::model.response(stats::model.frame(m))
+  yname <- deparse(stats::formula(m)[[2]])
+  positive <- is.numeric(y) && all(y > 0)
+  skewed <- tv_skew(stats::residuals(m)) > 0.5
+  out <- character()
+  counts <- is.numeric(y) && all(y >= 0) && all(y == round(y))
+  if ((isTRUE(flag$nonnormal) || isTRUE(flag$hetero)) && counts) {
+    out <- c(out, sprintf("%s is counts: fit a Poisson or negative binomial GLM instead of a linear model (glm(..., family = poisson) or MASS::glm.nb()); it models the variance growing with the mean. Avoid log(y + 1), which biases the estimates (O'Hara and Kotze 2010).", yname))
+  } else if (isTRUE(flag$nonnormal) || isTRUE(flag$hetero)) {
+    if (positive && (skewed || isTRUE(flag$hetero))) {
+      how <- if (skewed && isTRUE(flag$hetero)) {
+        "right-skewed with a spread that grows with the fitted values"
+      } else if (skewed) {
+        "right-skewed"
+      } else {
+        "more spread out at larger fitted values"
+      }
+      f <- paste(deparse(stats::formula(m)), collapse = " ")
+      out <- c(out, sprintf("Transform the response: the values are positive and the residuals are %s, which a log scale often fixes. Refit with log(%s) and check again; effects then multiply %s (report exp(coefficient)). MASS::boxcox(m) shows which power suits the data (0 = log, 0.5 = square root).", how, yname, yname))
+      out <- c(out, sprintf("Or keep the original scale with a Gamma GLM and a log link, which expects the spread to grow with the mean: glm(%s, family = Gamma(link = \"log\"), data = data).", f))
+    }
+    if (isTRUE(flag$hetero)) {
+      out <- c(out, "Keep the model but make the standard errors robust to unequal variance: lmtest::coeftest(m, vcov = sandwich::vcovHC(m, type = \"HC3\")). Or model the variance with weights (nlme::gls(..., weights = varPower())).")
+    }
+    if (isTRUE(flag$nonnormal) && !(positive && skewed)) {
+      out <- c(out, "Non-normal residuals that a transformation does not explain (heavy tails, outliers): fit a robust regression, MASS::rlm(), which down-weights extreme residuals, and compare its coefficients with those of lm(). With many observations the tests are fairly robust to non-normality alone.")
+    }
+    out <- c(out, "Rank-based or permutation alternatives make no assumption about the distribution: for one factor, kruskal.test() or wilcox.test(); for a whole model, a permutation test of each term (for example lmPerm::lmp()).")
+  }
+  if (isTRUE(flag$influence)) {
+    out <- c(out, "Refit without the influential row(s) and see whether the conclusions change; if they do, report both fits, or use MASS::rlm(). Do not drop data only because they are inconvenient.")
+  }
+  if (isTRUE(flag$collinear)) {
+    out <- c(out, "Collinear predictors: keep one of each correlated group, combine them (an index or a principal component), or ask a question that does not need their separate effects.")
+  }
+  if (!length(out)) {
+    out <- "The checks show no problem: report the model as it is, with the effects and their intervals. Still look at plot(m): tests miss curved relations that a residual plot shows."
+  } else {
+    out <- c(out, "After any change, check the residuals again with plot() and tidyvisor().")
+  }
+  out
+}
 
 tv_check <- function(check, value, meaning = "") {
   tibble::tibble(check = check, value = as.character(value), meaning = meaning)

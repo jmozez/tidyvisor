@@ -1,5 +1,31 @@
 # tidyvisor (development version)
 
+* Power analysis before fieldwork: `tv_power()`, or `advise(pilot,
+  question = "power", ...)` with pilot data. It gives the samples, traps,
+  pairs, observations or sites needed to detect a given effect, for two or
+  more groups, paired designs, proportions, counts (Poisson and negative
+  binomial), regression, correlation and samples nested in sites (with the
+  intra-class correlation), with a sensitivity table and the code.
+* Two guides: checking assumptions and choosing the test, and power
+  analysis before fieldwork.
+
+* Assumption checks and what to do when they fail:
+  - New group-comparison advice (`question = "compare"`, or give
+    `response` and `group`, with `paired` for repeated measurements). It
+    checks normality, skewness, outliers, equal spread and whether the
+    spread grows with the mean, then recommends the test those checks
+    support: Student or Welch t-test and ANOVA, a log scale, trimmed means
+    (Yuen), a rank test (Wilcoxon, Kruskal-Wallis), a permutation test, or
+    a Poisson or negative binomial GLM for counts. The alternatives come
+    with their code.
+  - `tidyvisor()` now explains any classical test result (`htest`): the
+    statistic, p-value, estimate and interval, what the test does not show,
+    and what to do next.
+  - The interpretation of a linear model ends with "What to do next": a log
+    or Box-Cox transformation, a Gamma GLM, robust standard errors, robust
+    regression (`MASS::rlm()`), a count GLM, or rank and permutation
+    alternatives, depending on which checks failed.
+
 * The vegan advisor covers the rest of the CANOCO toolkit: restricted
   permutations for blocks (`blocks`) and time series (`time`), canonical
   variate analysis for groups of sites, variation partitioning between

@@ -86,11 +86,11 @@ tv_registry <- function() {
 tv_register_builtin <- function() {
   register_advisor(
     package = "stats",
-    title = "Regression: linear and generalised linear models",
-    questions = "regression",
-    classes = c("glm", "lm"),
-    advise = tv_advise_regression,
-    interpret = tv_interpret_regression,
+    title = "Regression, group comparisons (t-test, ANOVA, alternatives), power analysis",
+    questions = c("regression", "compare", "power"),
+    classes = c("glm", "lm", "htest"),
+    advise = tv_advise_stats,
+    interpret = tv_interpret_stats,
     claims = function(x, args) "response" %in% args && !any(c("random", "smooth") %in% args)
   )
   register_advisor(
@@ -171,4 +171,22 @@ tv_register_builtin <- function() {
       any(c("date", "cases", "lon", "lat", "longitude", "latitude", "presence") %in% c(nm, args))
     }
   )
+}
+
+# The stats advisor answers two questions: a regression, or a comparison of
+# groups (when a `group` column is given).
+tv_advise_stats <- function(x, question = "auto", ...) {
+  if (identical(question, "power")) {
+    return(tv_advise_power(x, question = "power", ...))
+  }
+  by_group <- !identical(question, "regression") && "group" %in% ...names()
+  if (identical(question, "compare") || by_group) {
+    tv_advise_compare(x, question = "compare", ...)
+  } else {
+    tv_advise_regression(x, question = "regression", ...)
+  }
+}
+
+tv_interpret_stats <- function(x, ...) {
+  if (inherits(x, "htest")) tv_interpret_htest(x, ...) else tv_interpret_regression(x, ...)
 }

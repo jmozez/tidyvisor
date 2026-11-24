@@ -82,7 +82,9 @@ data with a `question` (or the argument shown), or give it the fitted model.
 
 | Package | Question or argument | Fitted classes | What it adds |
 |---|---|---|---|
-| stats | `"regression"`, `response` | `lm`, `glm` | family from the response, overdispersion, effects as changes, rate or odds ratios |
+| stats | `"regression"`, `response` | `lm`, `glm` | family from the response, overdispersion, effects as changes, rate or odds ratios; when assumptions fail, what to do next (transform, Gamma GLM, robust standard errors, robust regression) |
+| stats | `"compare"`, `response` and `group` (`paired`) | `htest` (t-test, Wilcoxon, Kruskal-Wallis, Shapiro-Wilk, correlation, chi-squared) | assumption checks per group and the test they support: t-test, Welch, log scale, trimmed means, rank or permutation test, count GLM; what to do next after any test |
+| stats | `"power"`, or `tv_power()` | | samples, traps or sites needed before fieldwork: two groups, paired, several groups, proportions, counts, regression, correlation, sites with nested samples; from pilot data or given effects |
 | lme4 | `"mixed"`, `random` | `lmerMod`, `glmerMod` | grouping-factor checks, random-effect SDs, intra-class correlation, singular fits |
 | glmmTMB | `"zero_inflation"` | `glmmTMB` | negative binomial and zero-inflated mixed models, structural zeros |
 | mgcv | `"smooth"`, `smooth` | `gam` | smooths by effective degrees of freedom, basis (`k`) and concurvity checks |
