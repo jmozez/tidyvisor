@@ -24,8 +24,8 @@ an *advisor* with tidyvisor, and one `tidyvisor()` serves them all:
 
 | Package                                               | Field             | Advises on                                                                                                                                        |
 |-------------------------------------------------------|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| [tidydiversity](https://tidydiversity.in4metrix.dev/) | Community ecology | Which ordination: unconstrained or constrained, linear or unimodal; which test; ordinations, principal response curves and variation partitioning |
-| [tidymapr](https://tidymapr.in4metrix.dev/)           | Spatial ecology   | Species distribution models, the spread of invasions, epidemic growth and R, range shifts, spatial autocorrelation                                |
+| [tidydiversity](https://tidydiversity.in4metrix.dev/) | Community ecology | Which ordination: unconstrained or constrained, linear or unimodal; which test; ordinations, principal response curves and variation partitioning; canonical variate analysis, trait-environment analyses (dc-CA, RLQ) and co-correspondence analysis |
+| [tidymapr](https://tidymapr.in4metrix.dev/) | Spatial ecology | Species distribution models, the spread of invasions, epidemic growth and R, range shifts, spatial autocorrelation, variation partitioning between environment and space |
 
 Other packages can join with `register_advisor()`.
 
@@ -187,7 +187,7 @@ data with a `question` (or the argument shown), or give it the fitted model.
 | lme4 | `"mixed"`, `random` | `lmerMod`, `glmerMod` | grouping-factor checks, random-effect SDs, intra-class correlation, singular fits |
 | glmmTMB | `"zero_inflation"` | `glmmTMB` | negative binomial and zero-inflated mixed models, structural zeros |
 | mgcv | `"smooth"`, `smooth` | `gam` | smooths by effective degrees of freedom, basis (`k`) and concurvity checks |
-| vegan | `"vegan"` | `metaMDS`, `rda`, `cca`, `capscale`, `dbrda`, `adonis2`, `betadisper`, `envfit` | RDA or CCA from the gradient length, NMDS stress, permutation tests, dispersion |
+| vegan | `"vegan"` | `metaMDS`, `rda`, `cca`, `capscale`, `dbrda`, `adonis2`, `betadisper`, `envfit` | RDA or CCA from the gradient length (the CANOCO rule: below 3 SD linear, above 4 SD unimodal), NMDS stress, permutation tests, dispersion; with `blocks`, `time`, `lon`/`lat` or `traits`, restricted permutations, CVA, spatial partitioning and dc-CA or RLQ |
 | brms | `"bayesian"` | `brmsfit` | priors and predictive checks, credible intervals, probability of direction, R-hat, ESS, divergences |
 | aods3 | `"overdispersion"` | `aodml`, `aodql` | beta-binomial and negative binomial models, the overdispersion parameter |
 
