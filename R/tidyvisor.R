@@ -43,7 +43,10 @@
 #' )
 #' tidyvisor(ord)
 tidyvisor <- function(x, ...) {
-  if (is.data.frame(x)) advise(x, ...) else interpret(x, ...)
+  # some results are data frames too (an adonis2 table), so check the
+  # classes the advisers interpret first
+  known <- unlist(lapply(tv_registry(), `[[`, "classes"))
+  if (is.data.frame(x) && !inherits(x, known)) advise(x, ...) else interpret(x, ...)
 }
 
 #' Advice on which analysis to run

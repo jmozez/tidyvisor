@@ -187,6 +187,8 @@ data with a `question` (or the argument shown), or give it the fitted model.
 | lme4 | `"mixed"`, `random` | `lmerMod`, `glmerMod` | grouping-factor checks, random-effect SDs, intra-class correlation, singular fits |
 | glmmTMB | `"zero_inflation"` | `glmmTMB` | negative binomial and zero-inflated mixed models, structural zeros |
 | mgcv | `"smooth"`, `smooth` | `gam` | smooths by effective degrees of freedom, basis (`k`) and concurvity checks |
+| vegan | `"vegan"` | `metaMDS`, `rda`, `cca`, `capscale`, `dbrda`, `adonis2`, `betadisper`, `envfit` | RDA or CCA from the gradient length, NMDS stress, permutation tests, dispersion |
+| brms | `"bayesian"` | `brmsfit` | priors and predictive checks, credible intervals, probability of direction, R-hat, ESS, divergences |
 | aods3 | `"overdispersion"` | `aodml`, `aodql` | beta-binomial and negative binomial models, the overdispersion parameter |
 
 ```r

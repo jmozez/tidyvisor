@@ -1,6 +1,6 @@
 # tidyvisor 0.2.0
 
-* New built-in advisers for four modelling packages, each with advice before
+* New built-in advisers for six modelling packages, each with advice before
   fitting and an interpretation after it:
   - lme4 (`question = "mixed"`, or give `random`): checks the grouping
     factors, chooses `lmer()`, `glmer()` or `glmer.nb()`, and explains fixed
@@ -11,8 +11,18 @@
   - mgcv (`question = "smooth"`, or give `smooth`): additive models, each
     smooth explained by its effective degrees of freedom, with basis (`k`)
     and concurvity checks.
+  - vegan (`question = "vegan"`): chooses RDA or CCA from the gradient
+    length, NMDS, PERMANOVA and its dispersion check; explains `metaMDS()`
+    stress, constrained ordinations with permutation tests, `adonis2()`,
+    `betadisper()` and `envfit()`.
+  - brms (`question = "bayesian"`): family, weakly informative priors, prior
+    and posterior predictive checks; explains effects with credible
+    intervals and the probability of their direction, group-level standard
+    deviations, and R-hat, effective sample size and divergences.
   - aods3 (`question = "overdispersion"`): beta-binomial and negative
     binomial models, with the overdispersion parameter explained.
+* `tidyvisor()` sends results that are also data frames (an `adonis2()`
+  table) to `interpret()`.
 * `interpret()` uses the adviser for the most specific class, so a `gam`
   (which is also a `glm`) goes to the mgcv adviser.
 * New built-in adviser for linear and generalised linear models

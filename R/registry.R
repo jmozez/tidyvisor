@@ -79,8 +79,8 @@ tv_registry <- function() {
   tv_env$advisors[ok]
 }
 
-# Built-in advisers: regression with lm() and glm(), lme4, glmmTMB, mgcv
-# and aods3, and the two companion
+# Built-in advisers: regression with lm() and glm(), lme4, glmmTMB, mgcv,
+# aods3, vegan and brms, and the two companion
 # packages through the functions they already export (tidydiversity and
 # tidymapr 0.3.0 and later).
 tv_register_builtin <- function() {
@@ -126,6 +126,22 @@ tv_register_builtin <- function() {
     classes = c("aodml", "aodql"),
     advise = tv_advise_aod,
     interpret = tv_interpret_aod
+  )
+  register_advisor(
+    package = "vegan",
+    title = "Community ordination and multivariate tests: rda(), cca(), metaMDS(), adonis2()",
+    questions = "vegan",
+    classes = c("metaMDS", "cca", "anova.cca", "betadisper", "envfit"),
+    advise = tv_advise_vegan,
+    interpret = tv_interpret_vegan
+  )
+  register_advisor(
+    package = "brms",
+    title = "Bayesian regression and multilevel models: brm()",
+    questions = "bayesian",
+    classes = "brmsfit",
+    advise = tv_advise_brms,
+    interpret = tv_interpret_brms
   )
   register_advisor(
     package = "tidydiversity",

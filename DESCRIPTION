@@ -27,6 +27,8 @@ Imports:
     stats,
     tibble (>= 3.2.0)
 Suggests:
+    brms,
+    posterior,
     aods3,
     glmmTMB,
     lme4,

@@ -46,6 +46,8 @@ reference:
     contents:
       - regression-advisor
       - model-advisors
+      - vegan-advisor
+      - brms-advisor
   - title: Advisers from other packages
     contents:
       - advisors
