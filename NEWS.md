@@ -1,3 +1,11 @@
+# tidyvisor (development version)
+
+* The vegan advisor covers the rest of the CANOCO toolkit: restricted
+  permutations for blocks (`blocks`) and time series (`time`), canonical
+  variate analysis for groups of sites, variation partitioning between
+  environment and space (`lon`, `lat`; `tidymapr::geo_varpart()`), and
+  trait-environment analysis with dc-CA or RLQ (`traits`).
+
 # tidyvisor 0.2.0
 
 * New built-in advisors for six modelling packages, each with advice before

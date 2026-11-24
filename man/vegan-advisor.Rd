@@ -6,7 +6,18 @@
 \alias{tv_interpret_vegan}
 \title{Advisor for vegan: ordination and multivariate tests}
 \usage{
-tv_advise_vegan(x, question = "vegan", species = NULL, env = NULL, ...)
+tv_advise_vegan(
+  x,
+  question = "vegan",
+  species = NULL,
+  env = NULL,
+  blocks = NULL,
+  time = NULL,
+  lon = NULL,
+  lat = NULL,
+  traits = NULL,
+  ...
+)
 
 tv_interpret_vegan(x, permutations = 999, ...)
 }
@@ -20,6 +31,18 @@ tv_interpret_vegan(x, permutations = 999, ...)
 column not in \code{env}).}
 
 \item{env}{Names of the explanatory columns, if any.}
+
+\item{blocks}{Name of a column of blocks: permutations are restricted to
+within blocks (\code{\link[tidydiversity:ord_design]{tidydiversity::ord_design()}}).}
+
+\item{time}{Name of a time (or transect position) column: permutations
+keep the order of the series.}
+
+\item{lon, lat}{Names of coordinate columns: the advice adds variation
+partitioning between environment and space (\code{tidymapr::geo_varpart()}).}
+
+\item{traits}{Name of a trait table, if traits were measured: the advice
+adds trait-environment analysis (dc-CA or RLQ).}
 
 \item{...}{Ignored.}
 

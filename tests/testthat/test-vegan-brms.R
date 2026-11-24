@@ -71,3 +71,20 @@ test_that("the gradient-length rule follows CANOCO: longest DCA axis, 3 and 4 SD
   expect_match(tidyvisor:::tv_gradient_rule(4), "between 3 and 4 SD")
   expect_match(tidyvisor:::tv_gradient_rule(4.01), "above 4 SD.*unimodal")
 })
+
+test_that("vegan advice covers designs, groups, space and traits", {
+  skip_if_not_installed("vegan")
+  data("dune", "dune.env", package = "vegan")
+  d <- cbind(dune, dune.env)
+  a <- advise(d, question = "vegan", env = c("A1", "Management"), blocks = "Use",
+              traits = "tr")
+  code <- paste(a$advice$code, collapse = "\n")
+  expect_match(code, "ord_design\\(blocks = \"Use\"\\)")
+  expect_match(code, "ord_cva")
+  expect_match(code, "trait_dcca")
+  data("mite", "mite.env", "mite.xy", package = "vegan")
+  m <- cbind(mite, mite.env[c("SubsDens", "WatrCont")], mite.xy)
+  b <- advise(m, question = "vegan", env = c("SubsDens", "WatrCont"), lon = "x", lat = "y")
+  expect_match(paste(b$advice$code, collapse = "\n"), "geo_varpart")
+  expect_false(any(c("x", "y") %in% b$checks$value))
+})

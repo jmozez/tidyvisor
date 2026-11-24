@@ -41,6 +41,14 @@
 #' @param species Names of the species columns (default: every numeric
 #'   column not in `env`).
 #' @param env Names of the explanatory columns, if any.
+#' @param blocks Name of a column of blocks: permutations are restricted to
+#'   within blocks ([tidydiversity::ord_design()]).
+#' @param time Name of a time (or transect position) column: permutations
+#'   keep the order of the series.
+#' @param lon,lat Names of coordinate columns: the advice adds variation
+#'   partitioning between environment and space (`tidymapr::geo_varpart()`).
+#' @param traits Name of a trait table, if traits were measured: the advice
+#'   adds trait-environment analysis (dc-CA or RLQ).
 #' @param permutations Number of permutations for the tests run while
 #'   interpreting a constrained ordination.
 #' @param ... Ignored.
@@ -75,8 +83,9 @@ NULL
 
 #' @rdname vegan-advisor
 #' @export
-tv_advise_vegan <- function(x, question = "vegan", species = NULL, env = NULL, ...) {
-  species <- species %||% setdiff(names(x)[vapply(x, is.numeric, TRUE)], env)
+tv_advise_vegan <- function(x, question = "vegan", species = NULL, env = NULL, blocks = NULL,
+                            time = NULL, lon = NULL, lat = NULL, traits = NULL, ...) {
+  species <- species %||% setdiff(names(x)[vapply(x, is.numeric, TRUE)], c(env, time, lon, lat))
   comm <- as.matrix(x[species])
   keep <- rowSums(comm) > 0
   comm <- comm[keep, colSums(comm[keep, , drop = FALSE]) > 0, drop = FALSE]
@@ -121,6 +130,46 @@ tv_advise_vegan <- function(x, question = "vegan", species = NULL, env = NULL, .
                       sprintf("%s\nm <- vegan::metaMDS(comm, distance = \"bray\", k = 2, trymax = 50)", sp))
     rows[[2]] <- step("Alternative", if (unimodal) "Correspondence analysis (CA)" else "PCA on Hellinger-transformed abundances", "An eigenvector method whose axes have explained variances.",
                       if (unimodal) "m2 <- vegan::cca(comm)" else "m2 <- vegan::rda(vegan::decostand(comm, \"hellinger\"))")
+  }
+  # ---- CANOCO-style extras: designs, groups, space, traits ----
+  if (!is.null(blocks)) {
+    rows[[length(rows) + 1]] <- step(
+      "Permutations", sprintf("Restrict permutations to within %s, and use it as a covariable", blocks),
+      "Sites in the same block are not independent; shuffling them across blocks makes p-values too small (Leps & Smilauer 2003).",
+      sprintf("# + Condition(%s) in the formula, then
+ord_test(o, design = ord_design(blocks = \"%s\"))   # tidydiversity", blocks, blocks)
+    )
+  }
+  if (!is.null(time)) {
+    rows[[length(rows) + 1]] <- step(
+      "Permutations", sprintf("Keep the order of %s: cyclic shifts of the series", time),
+      "Repeated samples in time (or along a transect) are autocorrelated; free permutation would break that structure.",
+      "ord_test(o, design = ord_design(within = \"series\"))   # tidydiversity; sites sorted by time"
+    )
+  }
+  fac <- env[vapply(env, function(v) is.factor(x[[v]]) || is.character(x[[v]]), TRUE)]
+  if (length(fac)) {
+    rows[[length(rows) + 1]] <- step(
+      "Groups", sprintf("To find the species combinations that best separate the %s groups: canonical variate analysis", fac[1]),
+      "CVA (discriminant analysis) maximises the separation between predefined groups; it needs fewer species than sites, so use a few species or the first PCA axes.",
+      sprintf("tidydiversity::ord_cva(data, abundance = abundance, group = \"%s\")", fac[1])
+    )
+  }
+  if (!is.null(lon) && !is.null(lat)) {
+    rows[[length(rows) + 1]] <- step(
+      "Space", "Partition the variation between environment and space",
+      "Spatially structured environment and dispersal both make composition spatially autocorrelated; Moran's eigenvector maps separate what the environment explains alone from what space explains (Borcard et al. 2018).",
+      sprintf("tidymapr::geo_varpart(data, abundance = abundance, env = env, env_vars = c(%s), lon = \"%s\", lat = \"%s\")",
+              paste0('"', env, '"', collapse = ", "), lon, lat)
+    )
+  }
+  if (!is.null(traits)) {
+    rows[[length(rows) + 1]] <- step(
+      "Traits", "Relate species traits to the environment: dc-CA or RLQ, with the fourth-corner max test",
+      "Testing traits against the environment needs both site-level and species-level permutations; the larger p-value controls the error rate (ter Braak et al. 2018; Dray et al. 2014).",
+      sprintf("tidydiversity::trait_dcca(data, abundance = abundance, traits = %s, trait_formula = ~ ..., env_formula = ~ %s)",
+              traits, paste(env, collapse = " + "))
+    )
   }
   rows[[length(rows) + 1]] <- step("Interpret", "Plain-language explanation of the result", "Variance explained, tests and how to read the plot.", "tidyvisor(m)")
   structure(list(question = question, checks = do.call(rbind, acc), advice = do.call(rbind, rows)), class = "tv_advice")
