@@ -1,22 +1,22 @@
 Package: tidyvisor
-Title: A Statistical Advisor for Tidy Ecological Analyses
+Title: A Statistical Advisor for Research: Design, Analysis and Interpretation
 Version: 0.2.0
 Authors@R: 
     person("Jimmy", "Moses", , "jimmy.moses@pnguot.ac.pg", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-3342-2384"))
-Description: Advice before the analysis and interpretation after it, shared
-    by a family of ecological packages. Given data and a question,
-    'tidyvisor' recommends the analysis, the test and the plots, checks the
-    data for the usual pitfalls and gives the code to run; given a fitted
-    result, it explains the numbers and the figure in plain sentences, with
-    its reasons, so the advice can be checked and overruled. The knowledge
-    lives in the packages that do the analyses, each of which registers an
-    advisor: 'tidydiversity' for community ecology (which ordination and
-    which test) and 'tidymapr' for spatial ecology (species distributions,
-    the spread of invasions and epidemics, range shifts and spatial
-    autocorrelation).
+Description: A chief statistician for R. Before the data are collected,
+    'tidyvisor' advises on study design, the unit of replication, sample
+    size (power analysis) and good research practice, with the reporting
+    guideline for the field. Given data and a question, it audits the data,
+    checks the assumptions of the candidate analyses and recommends the
+    analysis, the test and the plots, with the code to run and what to do
+    when assumptions fail. Given a fitted result, it explains the numbers in
+    plain sentences, with its reasons, so the advice can be checked and
+    overruled. Specialised knowledge lives in the packages that do the
+    analyses, each of which registers an advisor: 'tidydiversity' for
+    community ecology and 'tidymapr' for spatial ecology.
 License: MIT + file LICENSE
-URL: https://github.com/jmozez/tidyvisor
+URL: https://tidyvisor.in4metrix.dev/, https://github.com/jmozez/tidyvisor
 BugReports: https://github.com/jmozez/tidyvisor/issues
 Depends: 
     R (>= 4.1.0)
@@ -44,6 +44,7 @@ Suggests:
 Remotes: 
     jmozez/tidydiversity,
     jmozez/tidymapr
+VignetteBuilder: knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB

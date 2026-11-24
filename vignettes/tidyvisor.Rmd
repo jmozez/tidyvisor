@@ -1,0 +1,87 @@
+---
+title: "Get started with tidyvisor"
+vignette: >
+  %\VignetteIndexEntry{Get started with tidyvisor}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+tidyvisor is a statistical advisor: the chief statistician of a study. It
+advises at every stage:
+
+| Stage | Ask | tidyvisor gives |
+|---|---|---|
+| Planning | `tv_practice("plan")` | good practice: question, unit of replication, randomisation, pre-registration |
+| Before fieldwork | `tv_power(...)` | samples, traps or sites needed |
+| With the data | `tidyvisor(data, ...)` | a data audit, the analysis, the test and the code |
+| With the result | `tidyvisor(result)` | the result in plain sentences, the diagnostics and what to do next |
+| Reporting | `tv_practice("report", field = ...)` | the reporting guideline and what to share |
+
+It always gives its reasons, so its advice can be checked and overruled.
+
+```{r}
+library(tidyvisor)
+```
+
+## Plan the study
+
+```{r}
+tv_practice("plan", design = "experiment")
+```
+
+How many replicates? Suppose a difference of 5 units matters and the
+standard deviation is about 8:
+
+```{r}
+tv_power("two_groups", delta = 5, sd = 8)$checks
+```
+
+## Audit the data
+
+Give the data, and as much of the design as you know. The `ChickWeight`
+data record the weight of 50 chicks on four diets, weighed repeatedly:
+
+```{r}
+tidyvisor(ChickWeight, question = "design", response = "weight",
+          group = "Diet", unit = "Chick", time = "Time")
+```
+
+The audit finds the unit of replication (the chick, not the row), the
+repeated measurements over time, and suggests a mixed model.
+
+With no question at all, tidyvisor audits whatever it is given:
+
+```{r}
+tidyvisor(airquality)$checks
+```
+
+## Choose the analysis and check its assumptions
+
+```{r}
+tidyvisor(InsectSprays, response = "count", group = "spray")
+```
+
+## Explain the result
+
+```{r}
+m <- lm(mpg ~ wt + hp, data = mtcars)
+tidyvisor(m)
+```
+
+## Advisors from the companion packages
+
+The same `tidyvisor()` serves the companion packages, which register their
+own advisors when installed:
+[tidydiversity](https://tidydiversity.in4metrix.dev/) for community
+ecology (diversity, ordination, multivariate tests) and
+[tidymapr](https://tidymapr.in4metrix.dev/) for spatial ecology (species
+distributions, invasions, epidemics, range shifts). `advisors()` lists what
+is available:
+
+```{r}
+advisors()
+```

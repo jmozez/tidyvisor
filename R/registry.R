@@ -86,8 +86,8 @@ tv_registry <- function() {
 tv_register_builtin <- function() {
   register_advisor(
     package = "stats",
-    title = "Regression, group comparisons (t-test, ANOVA, alternatives), power analysis",
-    questions = c("regression", "compare", "power"),
+    title = "General statistics: study design and practice, regression, group comparisons, power",
+    questions = c("regression", "compare", "power", "design", "practice"),
     classes = c("glm", "lm", "htest"),
     advise = tv_advise_stats,
     interpret = tv_interpret_stats,
@@ -176,6 +176,12 @@ tv_register_builtin <- function() {
 # The stats advisor answers two questions: a regression, or a comparison of
 # groups (when a `group` column is given).
 tv_advise_stats <- function(x, question = "auto", ...) {
+  if (identical(question, "design")) {
+    return(tv_advise_design(x, question = "design", ...))
+  }
+  if (identical(question, "practice")) {
+    return(tv_practice(...))
+  }
   if (identical(question, "power")) {
     return(tv_advise_power(x, question = "power", ...))
   }

@@ -97,7 +97,9 @@ advise <- function(x, question = "auto", ...) {
       i = "Give {.arg question} to choose; {.fn advisors} lists the questions."
     ))
   }
-  tv_abort_question("auto", regs)
+  # No specialised advisor recognises the data: the general advisor audits
+  # them and suggests where to go next, so tidyvisor always answers.
+  tv_advise_design(x, question = "design", ...)
 }
 
 #' Plain-language interpretation of a fitted result

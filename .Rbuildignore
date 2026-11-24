@@ -13,3 +13,5 @@
 ^tidyvisor\.Rcheck$
 ^tidyvisor.*\.tar\.gz$
 ^vignettes/articles$
+^vercel\.json$
+^\.vercelignore$
