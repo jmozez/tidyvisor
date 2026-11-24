@@ -2,17 +2,17 @@
 % Please edit documentation in R/registry.R
 \name{advisors}
 \alias{advisors}
-\title{List the available advisers}
+\title{List the available advisors}
 \usage{
 advisors()
 }
 \value{
-A tibble with one row per adviser: \code{package}, \code{title}, whether the
+A tibble with one row per advisor: \code{package}, \code{title}, whether the
 package is \code{installed}, its \code{questions} and the result \code{classes} it can
 interpret.
 }
 \description{
-List the available advisers
+List the available advisors
 }
 \examples{
 advisors()

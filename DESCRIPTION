@@ -1,6 +1,6 @@
 Package: tidyvisor
-Title: A Statistical Adviser for Tidy Ecological Analyses
-Version: 0.1.0
+Title: A Statistical Advisor for Tidy Ecological Analyses
+Version: 0.2.0
 Authors@R: 
     person("Jimmy", "Moses", , "jimmy.moses@pnguot.ac.pg", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-3342-2384"))
@@ -11,7 +11,7 @@ Description: Advice before the analysis and interpretation after it, shared
     result, it explains the numbers and the figure in plain sentences, with
     its reasons, so the advice can be checked and overruled. The knowledge
     lives in the packages that do the analyses, each of which registers an
-    adviser: 'tidydiversity' for community ecology (which ordination and
+    advisor: 'tidydiversity' for community ecology (which ordination and
     which test) and 'tidymapr' for spatial ecology (species distributions,
     the spread of invasions and epidemics, range shifts and spatial
     autocorrelation).
@@ -20,12 +20,20 @@ URL: https://github.com/jmozez/tidyvisor
 BugReports: https://github.com/jmozez/tidyvisor/issues
 Depends: 
     R (>= 4.1.0)
-Imports: 
+Imports:
+    methods, 
     cli (>= 3.6.0),
     rlang (>= 1.1.0),
     stats,
     tibble (>= 3.2.0)
-Suggests: 
+Suggests:
+    brms,
+    posterior,
+    aods3,
+    glmmTMB,
+    lme4,
+    mgcv,
+    MASS, 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),

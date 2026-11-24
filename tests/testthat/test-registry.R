@@ -1,4 +1,4 @@
-test_that("a package can register an adviser and it is used", {
+test_that("a package can register an advisor and it is used", {
   old <- tidyvisor:::tv_env$advisors
   withr::defer(assign("advisors", old, envir = tidyvisor:::tv_env))
   # "stats" stands in for an installed package
@@ -16,12 +16,12 @@ test_that("a package can register an adviser and it is used", {
 })
 
 test_that("errors say what is available", {
-  expect_error(interpret(structure(list(), class = "nobody_knows")), "No adviser")
+  expect_error(interpret(structure(list(), class = "nobody_knows")), "No advisor")
   expect_error(advise(data.frame(a = 1), question = "no such question"), "question")
   expect_error(advise(1:3), "data frame")
 })
 
-test_that("the built-in advisers are listed", {
+test_that("the built-in advisors are listed", {
   a <- advisors()
   expect_true(all(c("tidydiversity", "tidymapr") %in% a$package))
   expect_true("explain" %in% a$questions[[which(a$package == "tidydiversity")]])

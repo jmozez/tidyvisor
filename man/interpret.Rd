@@ -11,13 +11,13 @@ interpret(x, ...)
 \code{tidydiversity::ord_fit()} or a growth rate from
 \code{tidymapr::epi_growth_rate()}.}
 
-\item{...}{Passed to the adviser (for example \code{permutations}).}
+\item{...}{Passed to the advisor (for example \code{permutations}).}
 }
 \value{
-The adviser's interpretation.
+The advisor's interpretation.
 }
 \description{
-\code{interpret()} finds the adviser that knows the class of \code{x} and returns its
+\code{interpret()} finds the advisor that knows the class of \code{x} and returns its
 interpretation: the numbers in sentences, what the tests say, and how to
 read the figure.
 }

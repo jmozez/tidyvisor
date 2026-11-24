@@ -3,11 +3,11 @@
 \docType{package}
 \name{tidyvisor-package}
 \alias{tidyvisor-package}
-\title{tidyvisor: A Statistical Adviser for Tidy Ecological Analyses}
+\title{tidyvisor: A Statistical Advisor for Tidy Ecological Analyses}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Advice before the analysis and interpretation after it, shared by a family of ecological packages. Given data and a question, 'tidyvisor' recommends the analysis, the test and the plots, checks the data for the usual pitfalls and gives the code to run; given a fitted result, it explains the numbers and the figure in plain sentences, with its reasons, so the advice can be checked and overruled. The knowledge lives in the packages that do the analyses, each of which registers an adviser: 'tidydiversity' for community ecology (which ordination and which test) and 'tidymapr' for spatial ecology (species distributions, the spread of invasions and epidemics, range shifts and spatial autocorrelation).
+Advice before the analysis and interpretation after it, shared by a family of ecological packages. Given data and a question, 'tidyvisor' recommends the analysis, the test and the plots, checks the data for the usual pitfalls and gives the code to run; given a fitted result, it explains the numbers and the figure in plain sentences, with its reasons, so the advice can be checked and overruled. The knowledge lives in the packages that do the analyses, each of which registers an advisor: 'tidydiversity' for community ecology (which ordination and which test) and 'tidymapr' for spatial ecology (species distributions, the spread of invasions and epidemics, range shifts and spatial autocorrelation).
 }
 \seealso{
 Useful links:
