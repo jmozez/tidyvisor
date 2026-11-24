@@ -1,0 +1,115 @@
+---
+title: "5. Mixed, additive and overdispersed models"
+description: "Random effects for grouped data, smooth effects for curved relations, and models for overdispersed and zero-inflated counts."
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+Ecological and field data are rarely independent and rarely straight.
+Measurements come in groups (plots in sites, repeated visits to the same
+animal), relations curve, and counts vary more than a Poisson model
+allows. tidyvisor advises on the four packages most used for these
+problems.
+
+```{r}
+library(tidyvisor)
+```
+
+## Grouped data: mixed models (lme4)
+
+`sleepstudy` records the reaction time of 18 people over 10 days of sleep
+deprivation. Each person is measured ten times, so the person is a
+grouping factor: a random effect.
+
+```{r}
+tidyvisor(lme4::sleepstudy, response = "Reaction", predictors = "Days",
+          random = "Subject")
+```
+
+```{r}
+m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = lme4::sleepstudy)
+tidyvisor(m)
+```
+
+The intra-class correlation says how much of the variation lies between
+people rather than within them. A singular fit (a variance estimated as
+zero) means the random-effect structure is too complex for the data.
+
+## Curved relations: additive models (mgcv)
+
+`airquality` relates ozone concentration in New York to temperature,
+wind and solar radiation. Ozone does not rise in a straight line with
+temperature; a generalised additive model lets the data show the shape.
+
+```{r}
+aq <- na.omit(airquality)
+tidyvisor(aq, response = "Ozone", predictors = c("Temp", "Wind", "Solar.R"),
+          smooth = c("Temp", "Wind"))
+```
+
+```{r}
+g <- mgcv::gam(Ozone ~ s(Temp) + s(Wind) + Solar.R, data = aq,
+               family = Gamma(link = "log"), method = "REML")
+tidyvisor(g)
+```
+
+An effective degrees of freedom near 1 means a smooth is nearly a
+straight line; larger values mean more curvature. The basis check warns
+when `k` is too small to capture the shape.
+
+## Overdispersed and zero-inflated counts (glmmTMB)
+
+When counts have more zeros than a Poisson or negative binomial model
+predicts, some zeros may be structural (the species cannot occur there)
+rather than chance. glmmTMB fits zero-inflated models with random effects.
+
+```{r}
+tidyvisor(glmmTMB::Salamanders, question = "zero_inflation",
+          response = "count", predictors = c("mined", "spp"), random = "site")
+```
+
+```{r}
+z <- glmmTMB::glmmTMB(count ~ mined + (1 | site), ziformula = ~ mined,
+                      family = glmmTMB::nbinom2, data = glmmTMB::Salamanders)
+tidyvisor(z)
+```
+
+## Overdispersed proportions (aods3)
+
+Proportions out of a known number of trials (germinated seeds out of
+seeds sown, infected hosts out of hosts examined) are often more variable
+than the binomial allows. The beta-binomial model of aods3 estimates the
+extra variation.
+
+```{r}
+data(orob2, package = "aods3")
+tidyvisor(orob2, question = "overdispersion", response = "m",
+          predictors = c("seed", "root"), trials = "n")
+```
+
+## How to read the advice
+
+* **Random or fixed?** A grouping factor is a random effect when its
+  levels are a sample from a larger population (sites, people, years) and
+  there are at least five or six of them; with fewer, estimate it as a
+  fixed effect.
+* **The unit of replication.** A treatment applied to whole sites is
+  tested against the variation between sites, not between plots within
+  sites. Random effects make that explicit.
+* **Overdispersion is not a nuisance.** It usually signals an unmeasured
+  variable or clustering. Model it, then ask what causes it.
+
+## References
+
+Bates, D., Mächler, M., Bolker, B. and Walker, S. (2015). Fitting linear
+mixed-effects models using lme4. *Journal of Statistical Software* 67(1),
+1-48.
+
+Brooks, M. E. et al. (2017). glmmTMB balances speed and flexibility among
+packages for zero-inflated generalized linear mixed modeling. *The R
+Journal* 9, 378-400.
+
+Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*,
+second edition. Chapman and Hall/CRC.

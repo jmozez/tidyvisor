@@ -1,5 +1,5 @@
 ---
-title: "Guide: power analysis before fieldwork"
+title: "2. Power analysis before fieldwork"
 ---
 
 ```{r, include = FALSE}

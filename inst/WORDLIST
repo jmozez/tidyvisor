@@ -1,5 +1,8 @@
 BMC
+Beall
 Behavioral
+Betancourt
+Biometrika
 Bolker
 Braak
 Breusch
@@ -12,6 +15,7 @@ CanoDraw
 Canoco
 Concato
 Config
+Crowder
 DeHaven
 Delacre
 ESS
@@ -23,6 +27,7 @@ Fagerland
 Feinstein
 Fligner
 Gabry
+Gelman
 Harrell
 Hurlbert
 Ieno
@@ -33,6 +38,7 @@ Leps
 Lesnoff
 Lifecycle
 Modeling
+Mächler
 NMDS
 Nosek
 ODMAP
@@ -92,19 +98,23 @@ mgcv
 modeling
 moses
 nd
+overfit
 pg
 pnguot
 pseudoreplicates
 pseudoreplication
 quadrats
+reparameterise
 rlang
 rmarkdown
 roxygen
 roxygen2
 studentised
+ter
 testthat
 tibble
 tidydiversity
 tidymapr
 tidyvisor
 withr
+Šmilauer

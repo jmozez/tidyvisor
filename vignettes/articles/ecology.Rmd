@@ -1,0 +1,87 @@
+---
+title: "7. Community and spatial ecology"
+description: "Which ordination and which multivariate test for community data; species distributions, invasions and epidemics."
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+The knowledge for specialised fields lives in the packages that do the
+analyses. Each registers an advisor with tidyvisor, so one `tidyvisor()`
+serves them all:
+
+* [tidydiversity](https://tidydiversity.in4metrix.dev/): community
+  ecology (diversity, ordination and multivariate tests);
+* [tidymapr](https://tidymapr.in4metrix.dev/): spatial ecology (species
+  distributions, the spread of invasions and epidemics, range shifts,
+  spatial autocorrelation);
+* the built-in vegan advisor, for analyses run directly in vegan.
+
+```{r}
+library(tidyvisor)
+```
+
+## Community data: which ordination?
+
+The dune meadow data pair species cover in 20 plots with the soil and
+management of each plot. Give the species and the site variables;
+tidyvisor measures the gradient length and follows the CANOCO rule:
+below 3 standard deviations a linear method (PCA, RDA), above 4 a
+unimodal one (CA, CCA), and either in between.
+
+```{r}
+data(dune, dune.env, package = "vegan")
+d <- cbind(dune, dune.env)
+tidyvisor(d, question = "vegan", species = names(dune),
+          env = c("A1", "Management"))
+```
+
+The result of the analysis can be explained in turn:
+
+```{r}
+r <- vegan::rda(vegan::decostand(dune, "hellinger") ~ A1 + Management,
+                data = dune.env)
+tidyvisor(r)
+```
+
+## With tidydiversity
+
+For data in the tidy long format of tidydiversity (one row per site and
+species), the tidydiversity advisor chooses between unconstrained and
+constrained ordination, tests and diagrams. Frogs along Mount Wilhelm,
+Papua New Guinea:
+
+```{r, eval = rlang::is_installed("tidydiversity")}
+tidyvisor(tidydiversity::png_frogs, abundance = abundance)
+```
+
+## With tidymapr
+
+Case counts over time go to the tidymapr advisor, which recommends the
+growth-rate model and the conversion to a reproduction number:
+
+```{r, eval = rlang::is_installed("tidymapr")}
+cases <- data.frame(
+  week = seq(as.Date("2024-01-01"), by = "week", length.out = 12),
+  n = c(2, 3, 5, 4, 9, 12, 15, 24, 30, 41, 60, 77)
+)
+tidyvisor(cases, question = "epidemic", date = "week", cases = "n")
+```
+
+tidymapr also advises on species distribution models (`presence`),
+range shifts, the spread of invasions and spatial autocorrelation;
+`advisors()` lists every question.
+
+```{r}
+advisors()
+```
+
+## References
+
+Legendre, P. and Gallagher, E. D. (2001). Ecologically meaningful
+transformations for ordination of species data. *Oecologia* 129, 271-280.
+
+ter Braak, C. J. F. and Šmilauer, P. (2018). *Canoco reference manual and
+user's guide: software for ordination (version 5.10)*. Microcomputer
+Power, Ithaca.

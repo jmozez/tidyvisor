@@ -1,0 +1,94 @@
+---
+title: "A diet experiment, from plan to report"
+description: "Planning, auditing, analysing and reporting a repeated-measures experiment with tidyvisor."
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", dev.args = list(bg = "white"),
+                      fig.width = 7, fig.height = 4, out.width = "100%")
+```
+
+**The study.** Fifty chicks were fed one of four diets and weighed every
+few days from birth to day 21 (`ChickWeight`, from Crowder and Hand
+1990). **The question:** do the diets differ in how fast chicks grow?
+
+```{r}
+library(tidyvisor)
+```
+
+## 1. Plan
+
+Before the experiment, tidyvisor lists the good practice for an
+experiment:
+
+```{r}
+tv_practice("plan", design = "experiment")$advice[, c("step", "recommendation")]
+```
+
+How many chicks per diet? Suppose a difference of 40 g at day 21 matters
+and the standard deviation between chicks is about 50 g:
+
+```{r}
+tv_power("two_groups", delta = 40, sd = 50)
+```
+
+## 2. Audit the data
+
+```{r}
+tidyvisor(ChickWeight, question = "design", response = "weight",
+          group = "Diet", unit = "Chick", time = "Time")
+```
+
+The audit finds what matters most: the **chick**, not the row, is the
+unit of replication. There are 50 replicates, not 578, and the design is
+unbalanced (20 chicks on diet 1, 10 on the others).
+
+## 3. Look at the data
+
+```{r}
+library(ggplot2)
+ggplot(ChickWeight, aes(Time, weight, group = Chick, colour = Diet)) +
+  geom_line(alpha = 0.6) +
+  facet_wrap(~ Diet, nrow = 1) +
+  labs(x = "Age (days)", y = "Weight (g)") +
+  theme_bw() + theme(legend.position = "none")
+```
+
+Growth curves fan out: chicks differ in growth rate, and the spread grows
+with age.
+
+## 4. Analyse
+
+A mixed model with a random intercept and slope for each chick lets each
+grow at its own rate, and tests whether diets change the average rate
+(the diet-by-time interaction).
+
+```{r}
+tidyvisor(ChickWeight, response = "weight", predictors = c("Time", "Diet"),
+          random = "Chick")
+```
+
+```{r}
+m <- lme4::lmer(weight ~ Time * Diet + (Time | Chick), data = ChickWeight)
+tidyvisor(m)
+```
+
+## 5. Report
+
+A model paragraph, with the numbers from the output above:
+
+> Chick weight was modelled with a linear mixed model with age, diet and
+> their interaction as fixed effects, and a random intercept and slope
+> for age for each chick (lme4; Bates et al. 2015), because each chick was
+> weighed repeatedly and the chick was the unit of replication (50
+> chicks). Diets changed the rate of growth: see the age-by-diet
+> coefficients and their 95% confidence intervals in the table above.
+
+## References
+
+Bates, D., Mächler, M., Bolker, B. and Walker, S. (2015). Fitting linear
+mixed-effects models using lme4. *Journal of Statistical Software* 67(1),
+1-48.
+
+Crowder, M. and Hand, D. (1990). *Analysis of Repeated Measures*. Chapman
+and Hall.

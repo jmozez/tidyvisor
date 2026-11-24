@@ -1,0 +1,75 @@
+---
+title: "6. Bayesian models"
+description: "Priors and predictive checks before fitting; credible intervals, probabilities of direction and sampling diagnostics after it."
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+A Bayesian model combines the data with prior knowledge and gives the
+whole distribution of each effect: its most likely value, a credible
+interval that contains it with a stated probability, and the probability
+that it is positive or negative. tidyvisor advises on models fitted with
+brms, which writes and runs the Stan code.
+
+```{r}
+library(tidyvisor)
+```
+
+## Before fitting
+
+```{r}
+tidyvisor(lme4::sleepstudy, question = "bayesian", response = "Reaction",
+          predictors = "Days", random = "Subject")
+```
+
+The advice gives the family, weakly informative priors and two checks:
+
+* a **prior predictive check**, which simulates data from the priors
+  alone: plausible priors produce plausible data;
+* a **posterior predictive check**, which compares data simulated from
+  the fitted model with the observed data.
+
+## After fitting
+
+Fitting a brms model compiles a Stan program, which takes a minute or
+two, so the code below is shown but not run on this page.
+
+```{r, eval = FALSE}
+m <- brms::brm(Reaction ~ Days + (1 | Subject), data = lme4::sleepstudy,
+               chains = 4, cores = 4, seed = 1)
+tidyvisor(m)
+```
+
+The interpretation reports, for each effect, the posterior mean, its
+credible interval and the probability of its direction, followed by the
+diagnostics that decide whether the posterior can be trusted at all:
+
+| Diagnostic | Should be | If not |
+|---|---|---|
+| R-hat | below 1.01 | the chains disagree: run longer or reparameterise |
+| Effective sample size | above 400 | interval limits are imprecise: more iterations |
+| Divergent transitions | none | the sampler missed part of the posterior: raise `adapt_delta` |
+
+## How to read the advice
+
+* **A credible interval is a probability statement about the effect**,
+  given the model and priors; a confidence interval is not.
+* **Priors matter most with few data.** Report them, and check that the
+  conclusions hold with wider priors.
+* **Diagnostics first.** Never read estimates from chains that have not
+  converged.
+
+## References
+
+Bürkner, P.-C. (2017). brms: an R package for Bayesian multilevel models
+using Stan. *Journal of Statistical Software* 80(1), 1-28.
+
+Gabry, J., Simpson, D., Vehtari, A., Betancourt, M. and Gelman, A.
+(2019). Visualization in Bayesian workflow. *Journal of the Royal
+Statistical Society A* 182, 389-402.
+
+Vehtari, A., Gelman, A., Simpson, D., Carpenter, B. and Bürkner, P.-C.
+(2021). Rank-normalization, folding, and localization: an improved R-hat
+for assessing convergence of MCMC. *Bayesian Analysis* 16, 667-718.

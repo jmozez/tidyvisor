@@ -1,0 +1,87 @@
+---
+title: "Comparing treatments with counts"
+description: "Why an ANOVA on counts fails its assumptions, and the count model tidyvisor recommends instead."
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", dev.args = list(bg = "white"),
+                      fig.width = 7, fig.height = 4, out.width = "100%")
+```
+
+**The study.** Insects were counted on agricultural plots treated with
+one of six sprays, twelve plots per spray (`InsectSprays`; Beall 1942).
+**The question:** do the sprays differ in how many insects survive?
+
+```{r}
+library(tidyvisor)
+```
+
+## 1. Look at the data
+
+```{r}
+library(ggplot2)
+ggplot(InsectSprays, aes(spray, count)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.6) +
+  labs(x = "Spray", y = "Insects per plot") +
+  theme_bw()
+```
+
+The sprays with few insects also have little spread: the variance grows
+with the mean, as it does for counts.
+
+## 2. Ask which test
+
+```{r}
+tidyvisor(InsectSprays, response = "count", group = "spray")
+```
+
+The checks confirm what the plot shows: skewed groups, a more than
+threefold difference in spread, and counts. A one-way ANOVA would be
+unreliable; tidyvisor recommends a count model, with a rank test and a
+robust test as alternatives.
+
+## 3. What an ANOVA would have said
+
+```{r}
+a <- lm(count ~ spray, data = InsectSprays)
+tidyvisor(a)$sections[c("Diagnostics", "What to do next")]
+```
+
+## 4. The count model
+
+```{r}
+nb <- MASS::glm.nb(count ~ spray, data = InsectSprays)
+tidyvisor(nb)
+```
+
+Each spray's effect is now a **ratio** of mean counts relative to spray
+A, with its confidence interval: the natural way to report a treatment
+that reduces pests by a fraction.
+
+## 5. A check with a rank test
+
+```{r}
+tidyvisor(kruskal.test(count ~ spray, data = InsectSprays))
+```
+
+Both analyses agree that the sprays differ; the count model also says by
+how much.
+
+## 6. Report
+
+> Insect counts were compared among the six sprays with a negative
+> binomial generalised linear model (`MASS::glm.nb()`), because the counts
+> were overdispersed and their variance increased with the mean, which
+> ruled out a one-way ANOVA. Effects are reported as ratios of mean
+> counts relative to spray A with 95% confidence intervals; a
+> Kruskal-Wallis test gave the same conclusion.
+
+## References
+
+Beall, G. (1942). The transformation of data from entomological field
+experiments so that the analysis of variance becomes applicable.
+*Biometrika* 32, 243-262.
+
+O'Hara, R. B. and Kotze, D. J. (2010). Do not log-transform count data.
+*Methods in Ecology and Evolution* 1, 118-122.
