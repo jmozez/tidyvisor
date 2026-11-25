@@ -1,5 +1,23 @@
 # tidyvisor (development version)
 
+* After an overall test, the interpretation says what to do next in a new
+  section, "After the overall test":
+  - significant, with three or more groups: go on to post hoc comparisons,
+    with the method that suits the test (pairwise Wilcoxon or Dunn after
+    Kruskal-Wallis, Games-Howell or Tukey after ANOVA, cell residuals or
+    pairwise proportions after a chi-squared test) and code that uses the
+    data's own column names;
+  - not significant: do not test every pair, which is a search for something
+    significant; report the effect size and the difference the study could
+    have detected;
+  - two groups: no post hoc tests are needed; report the effect size.
+  For `lm()`, `glm()`, `aov()`, `lmer()`, `glmer()` and `glmmTMB()` fits,
+  each factor with three or more levels is tested with `drop1()`: when it
+  matters, its levels are compared with `emmeans` (Tukey, or Dunnett against
+  a control), and within each level of the other factor when they interact.
+* `tidyvisor()` reads an `aov()` fit as the linear model it is (it failed
+  before).
+
 * `tv_save()` writes advice and interpretations to a text or Markdown file,
   and `format()` returns them as text. In the RStudio console the advice
   could not be captured with `capture.output()` or `sink()`.

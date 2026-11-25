@@ -25,7 +25,7 @@ test_that("paired comparisons use the differences", {
 test_that("htest results are explained with next steps", {
   k <- tidyvisor(kruskal.test(count ~ spray, data = InsectSprays))
   expect_s3_class(k, "tv_interpretation")
-  expect_true(any(grepl("pairwise.wilcox", k$sections$`What to do next`)))
+  expect_true(any(grepl("pairwise.wilcox", k$sections$`After the overall test`)))
   sw <- interpret(shapiro.test(InsectSprays$count))
   expect_true(any(grepl("log transformation", sw$sections$`What to do next`)))
   tt <- interpret(t.test(extra ~ group, data = sleep))
