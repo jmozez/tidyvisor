@@ -25,6 +25,7 @@ Imports:
     cli (>= 3.6.0),
     rlang (>= 1.1.0),
     stats,
+    utils,
     tibble (>= 3.2.0)
 Suggests:
     brms,

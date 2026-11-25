@@ -82,7 +82,7 @@ tv_practice <- function(stage = c("all", "plan", "collect", "analyse", "report")
   plan <- rbind(
     r("Plan", "Write the question and the hypothesis before collecting data", "A precise question decides the design, the response, the unit of replication and the analysis; analyses chosen after seeing the data inflate false positives."),
     r("Plan", "Define the unit of replication", "The unit to which a treatment is applied independently (plot, site, cage, patient, school) sets the sample size. Measurements within a unit are not replicates (pseudoreplication; Hurlbert 1984)."),
-    r("Plan", "Run a power analysis", "Decide the sample size from the smallest effect worth detecting, not from habit or budget alone.", "tv_power(\"two_groups\", delta = , sd = )"),
+    r("Plan", "Run a power analysis", "Decide the sample size from the smallest effect worth detecting, not from habit or budget alone.", "tv_power(\"two_groups\", delta = <difference to detect>, sd = <standard deviation>)"),
     if (design %in% c("any", "experiment")) r("Plan", "Randomise, include controls and blind where possible", "Randomising which unit gets which treatment removes systematic bias; controls give the baseline; blinding observers prevents expectations from colouring measurements."),
     if (design %in% c("any", "observational", "monitoring", "survey")) r("Plan", "List the confounders and measure them", "Without randomisation, any variable that affects both the predictor and the response can create or hide an effect; draw a causal diagram and measure what it shows."),
     if (design %in% c("any", "survey")) r("Plan", "Use probability sampling and pilot the instrument", "A random or stratified sample lets results generalise to the population; a pilot finds unclear questions and estimates the variability for the power analysis."),
@@ -98,7 +98,7 @@ tv_practice <- function(stage = c("all", "plan", "collect", "analyse", "report")
     r("Collect", "Back up in at least two places", "Field data cannot be collected again.")
   )
   analyse <- rbind(
-    r("Analyse", "Explore the data before modelling", "Plot the response and every predictor: outliers, zeros, collinearity, non-linear relations and imbalance change which analysis is right (Zuur et al. 2010).", "advise(data, question = \"design\", response = , group = , unit = )"),
+    r("Analyse", "Explore the data before modelling", "Plot the response and every predictor: outliers, zeros, collinearity, non-linear relations and imbalance change which analysis is right (Zuur et al. 2010).", "advise(data, question = \"design\", response = \"<response column>\", group = \"<group column>\", unit = \"<unit column>\")"),
     r("Analyse", "Match the model to the response and the design", "Counts, proportions, presence-absence and positive skewed values have their own families; nested or repeated measurements need random effects.", "tidyvisor(data, response = )"),
     r("Analyse", "Check the assumptions, then act on them", "Residual plots and tests show whether the model fits; tidyvisor says what to do when it does not.", "tidyvisor(model)"),
     r("Analyse", "Report effect sizes with confidence intervals, not p-values alone", "A p-value says nothing about how large or important an effect is, and p < 0.05 is not a measure of truth (Wasserstein and Lazar 2016)."),
@@ -212,7 +212,7 @@ tv_advise_design <- function(x, question = "design", response = NULL, group = NU
       if (all(g_per_u == 1)) {
         reps <- tapply(as.character(u), x[[group]], function(v) length(unique(v)))
         add("Unit of replication", sprintf("%s (treatment applied to whole units)", unit),
-            sprintf("true replicates per group: %s, not the number of rows", paste(sprintf("%s %d", names(reps), as.integer(reps)), collapse = ", ")))
+            sprintf("true replicates (%ss) per group: %s; not the number of rows", unit, paste(sprintf("%s %s: %d", group, names(reps), as.integer(reps)), collapse = ", ")))
         if (per > 1) {
           todo("Design", sprintf("Treat %s as the unit of replication", unit),
                sprintf("Each %s received one treatment, so its %.1f measurements are pseudoreplicates (Hurlbert 1984). Analyse with a random effect for %s, or average within each %s; counting rows as replicates makes p-values far too small.", unit, per, unit, unit),

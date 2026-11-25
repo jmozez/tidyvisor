@@ -65,16 +65,16 @@ when installed.
 library(tidyvisor)
 tv_practice("plan", design = "experiment")
 #> 
-#> -- tidyvisor: which analysis? --------------------------------------------------
+#> ── tidyvisor: good research practice ───────────────────────────────────────────
 #> Question: practice
 #> 
-#> -- What the data show --
+#> ── What the data show ──
 #> 
-#> * Stage: plan
-#> * Study: experiment
-#> * Field: general
+#> • Stage: plan
+#> • Study: experiment
+#> • Field: general
 #> 
-#> -- Recommended --
+#> ── Recommended ──
 #> 
 #> Plan: Write the question and the hypothesis before collecting data
 #> A precise question decides the design, the response, the unit of replication
@@ -87,7 +87,7 @@ tv_practice("plan", design = "experiment")
 #> Plan: Run a power analysis
 #> Decide the sample size from the smallest effect worth detecting, not from habit
 #> or budget alone.
-#> tv_power("two_groups", delta = , sd = )
+#> tv_power("two_groups", delta = <difference to detect>, sd = <standard deviation>)
 #> Plan: Randomise, include controls and blind where possible
 #> Randomising which unit gets which treatment removes systematic bias; controls
 #> give the baseline; blinding observers prevents expectations from colouring
@@ -101,25 +101,26 @@ tv_practice("plan", design = "experiment")
 tidyvisor(ChickWeight, question = "design", response = "weight",
           group = "Diet", unit = "Chick", time = "Time")
 #> 
-#> -- tidyvisor: which analysis? --------------------------------------------------
+#> ── tidyvisor: is the design sound? ─────────────────────────────────────────────
 #> Question: design
 #> 
-#> -- What the data show --
+#> ── What the data show ──
 #> 
-#> * Rows and columns: 578 rows, 4 columns
-#> * Missing values: none
-#> * Duplicated rows: 0
-#> * Response: whole numbers, large: probably a measurement rounded to whole
-#>   units: If these are counts, use a Poisson or negative binomial model; if a
+#> • Rows and columns: 578 rows, 4 columns
+#> • Missing values: none
+#> • Duplicated rows: 0
+#> • Response: whole numbers, large: probably a measurement rounded to whole units
+#>   — If these are counts, use a Poisson or negative binomial model; if a
 #>   measurement, a linear model (or Gamma for positive skewed values).
-#> * Groups: 4: 1 (220), 2 (120), 3 (120), 4 (118)
-#> * Units: 50 units, 11.6 rows per unit: several measurements per unit: they are
+#> • Groups: 4 — 1 (220), 2 (120), 3 (120), 4 (118)
+#> • Units: 50 units, 11.6 rows per unit — several measurements per unit: they are
 #>   not independent
-#> * Unit of replication: Chick (treatment applied to whole units): true
-#>   replicates per group: 1 20, 2 10, 3 10, 4 10, not the number of rows
-#> * Time points: 12: repeated over time: residuals may be autocorrelated
+#> • Unit of replication: Chick (treatment applied to whole units) — true
+#>   replicates (Chicks) per group: Diet 1: 20, Diet 2: 10, Diet 3: 10, Diet 4:
+#>   10; not the number of rows
+#> • Time points: 12 — repeated over time: residuals may be autocorrelated
 #> 
-#> -- Recommended --
+#> ── Recommended ──
 #> 
 #> Design: Treat Chick as the unit of replication
 #> Each Chick received one treatment, so its 11.6 measurements are
@@ -150,23 +151,23 @@ to the tidydiversity advisor:
 frogs <- tidydiversity::png_frogs
 tidyvisor(frogs, abundance = abundance)
 #> 
-#> -- tidyvisor: which analysis? --------------------------------------------------
+#> ── tidyvisor: what are the main patterns? ──────────────────────────────────────
 #> Question: explore
 #> 
-#> -- What the data show --
+#> ── What the data show ──
 #> 
-#> * Sites: "8" — few sites: tests have little power
-#> * Species: "55"
-#> * Data: "abundances"
-#> * Zeros: "79%" — many zeros: shared absences must not make sites similar
+#> • Sites: 8 — few sites: tests have little power
+#> • Species: 55
+#> • Data: abundances
+#> • Zeros: 79% — many zeros: shared absences must not make sites similar
 #>   (Hellinger or Bray-Curtis)
-#> * Species in one site only: "51%" — many rare species: they add noise; consider
+#> • Species in one site only: 51% — many rare species: they add noise; consider
 #>   removing or down-weighting
-#> * Gradient length (DCA axis 1, SD units): "11.56" — above 4 SD: long; species
+#> • Gradient length (DCA axis 1, SD units): 11.56 — above 4 SD: long; species
 #>   rise and fall along the gradient; unimodal methods (CA, CCA)
-#> * Site variables (model terms): "0"
+#> • Site variables (model terms): 0
 #> 
-#> -- Recommended --
+#> ── Recommended ──
 #> 
 #> Approach: Unconstrained (indirect) ordination
 #> Branch: ordination (a picture, no test). You want to describe the main patterns
@@ -204,16 +205,16 @@ cases <- data.frame(
 )
 tidyvisor(cases, question = "epidemic", date = "week", cases = "n")
 #> 
-#> -- tidyvisor: which analysis? --------------------------------------------------
+#> ── tidyvisor: how fast is the epidemic growing? ────────────────────────────────
 #> Question: epidemic
 #> 
-#> -- What the data show --
+#> ── What the data show ──
 #> 
-#> * Records: 12
-#> * Time points: 12
-#> * Dispersion about the trend (Pearson): 0.1 — close to Poisson
+#> • Records: 12
+#> • Time points: 12
+#> • Dispersion about the trend (Pearson): 0.1 — close to Poisson
 #> 
-#> -- Recommended --
+#> ── Recommended ──
 #> 
 #> Approach: Exponential growth rate from a log-linear count model
 #> Early in an outbreak cases grow exponentially; the slope of log cases on time
@@ -248,31 +249,31 @@ ord <- tidydiversity::ord_fit(frogs,
 )
 tidyvisor(ord)
 #> 
-#> -- tidyvisor: what the results show --------------------------------------------
+#> ── tidyvisor: what the results show ────────────────────────────────────────────
 #> 
-#> -- Overview --
+#> ── Overview ──
 #> 
-#> * A principal component analysis (PCA) of 8 sites and 55 species
+#> • A principal component analysis (PCA) of 8 sites and 55 species
 #>   (Hellinger-transformed): an unconstrained ordination, describing the main
 #>   patterns of composition.
 #> 
-#> -- Variation --
+#> ── Variation ──
 #> 
-#> * The first two axes hold 27.1% and 22.3% of the variation (49.4% together).
-#> * No axis holds more than expected by chance (broken stick): the structure is
+#> • The first two axes hold 27.1% and 22.3% of the variation (49.4% together).
+#> • No axis holds more than expected by chance (broken stick): the structure is
 #>   weak.
 #> 
-#> -- Species --
+#> ── Species ──
 #> 
-#> * Axis 1 (PC1) runs from FR01, FR25, FR23 (negative end) to FR36, FR34, FR12
+#> • Axis 1 (PC1) runs from FR01, FR25, FR23 (negative end) to FR36, FR34, FR12
 #>   (positive end).
-#> * Axis 2 (PC2) runs from FR16, FR29, FR05 (negative end) to FR36, FR01, FR34
+#> • Axis 2 (PC2) runs from FR16, FR29, FR05 (negative end) to FR36, FR01, FR34
 #>   (positive end).
 #> 
-#> -- Reading the diagram --
+#> ── Reading the diagram ──
 #> 
-#> * Sites (circles) close together have similar species composition.
-#> * With species scaling, the angles between species (and between species and
+#> • Sites (circles) close together have similar species composition.
+#> • With species scaling, the angles between species (and between species and
 #>   variable arrows) approximate their correlations; distances between sites are
 #>   only approximate.
 ```
@@ -300,6 +301,22 @@ fitted model.
 tidyvisor(lme4::sleepstudy, response = "Reaction", predictors = "Days", random = "Subject")
 m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = lme4::sleepstudy)
 tidyvisor(m)
+```
+
+## Saving the advice
+
+In the RStudio console the advice is written straight to the screen, so
+`capture.output()` and `sink()` cannot record it. `tv_save()` writes one
+or more pieces of advice to a file: a `.md` file gets a heading for
+each, ready for a report or a Quarto document; any other file gets plain
+text. `format()` returns the advice as text.
+
+``` r
+plan <- tv_power("two_groups", delta = 5, sd = 8)
+fit <- tidyvisor(lm(mpg ~ wt + hp, data = mtcars))
+tv_save(plan, fit, file = "advice.md")
+tv_save(tidyvisor(InsectSprays, response = "count", group = "spray"),
+        file = "advice.md", append = TRUE)
 ```
 
 ## Which advisors are there?

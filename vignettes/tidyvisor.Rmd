@@ -72,6 +72,20 @@ m <- lm(mpg ~ wt + hp, data = mtcars)
 tidyvisor(m)
 ```
 
+## Save the advice
+
+Keep the advice with the analysis: `tv_save()` writes it to a file, a
+heading for each piece in a `.md` file, plain text otherwise. It works in
+the RStudio console, where `capture.output()` and `sink()` record nothing,
+and on the advice of the companion packages too. `format()` returns the
+advice as text.
+
+```{r save}
+f <- tempfile(fileext = ".md")
+tv_save(tv_power("two_groups", delta = 5, sd = 8), file = f)
+head(readLines(f), 12)
+```
+
 ## Advisors from the companion packages
 
 The same `tidyvisor()` serves the companion packages, which register their

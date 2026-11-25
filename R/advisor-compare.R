@@ -214,7 +214,7 @@ tv_interpret_htest <- function(x, ...) {
   s$Overview <- sprintf("%s on %s.", meth, x$data.name)
   stat <- if (!is.null(x$statistic)) {
     sprintf("%s = %s%s", names(x$statistic), tv_num(unname(x$statistic)),
-            if (!is.null(x$parameter)) paste0(" (", paste(sprintf("%s = %s", names(x$parameter), tv_num(unname(x$parameter))), collapse = ", "), ")") else "")
+            if (!is.null(x$parameter)) paste0(" (", paste(sprintf("%s = %s", names(x$parameter), tv_whole(unname(x$parameter))), collapse = ", "), ")") else "")
   } else {
     ""
   }
