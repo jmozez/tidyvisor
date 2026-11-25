@@ -129,6 +129,22 @@ m <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = lme4::sleepstudy)
 tidyvisor(m)
 ```
 
+## Saving the advice
+
+In the RStudio console the advice is written straight to the screen, so
+`capture.output()` and `sink()` cannot record it. `tv_save()` writes one or
+more pieces of advice to a file: a `.md` file gets a heading for each, ready
+for a report or a Quarto document; any other file gets plain text.
+`format()` returns the advice as text.
+
+```{r save, eval = FALSE}
+plan <- tv_power("two_groups", delta = 5, sd = 8)
+fit <- tidyvisor(lm(mpg ~ wt + hp, data = mtcars))
+tv_save(plan, fit, file = "advice.md")
+tv_save(tidyvisor(InsectSprays, response = "count", group = "spray"),
+        file = "advice.md", append = TRUE)
+```
+
 ## Which advisors are there?
 
 ```{r advisors}
