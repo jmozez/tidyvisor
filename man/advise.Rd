@@ -26,11 +26,12 @@ plots, and the code.
 The advisor is chosen by \code{question}. With \code{question = "auto"} (the
 default), each installed advisor is asked whether the data and the
 arguments look like its kind: community data given with \code{abundance} or a
-\code{formula} belong to tidydiversity, dated records or case counts to
-tidymapr. When more than one advisor claims the data, give \code{question}.
+\code{formula} belong to tidydiversity, records with coordinates to tidymapr,
+and case counts, exposures and outcomes to tidyepidemio. When more than one
+advisor claims the data, give \code{question}.
 }
 \examples{
-\dontshow{if (rlang::is_installed("tidymapr")) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("tidymapr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cases <- data.frame(
   week = seq(as.Date("2024-01-01"), by = "week", length.out = 12),
   n = c(2, 3, 5, 4, 9, 12, 15, 24, 30, 41, 60, 77)

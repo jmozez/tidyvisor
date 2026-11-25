@@ -75,14 +75,22 @@ tv_env$advisors <- list()
 # built-in advisor with its own registration.
 tv_registry <- function() {
   regs <- tv_env$advisors
-  ok <- vapply(names(regs), function(p) requireNamespace(p, quietly = TRUE), TRUE)
+  ok <- vapply(names(regs), function(p) {
+    if (!requireNamespace(p, quietly = TRUE)) {
+      return(FALSE)
+    }
+    # a built-in advisor names functions the package exports; an older
+    # version without them is skipped rather than failing when called
+    funs <- Filter(is.character, regs[[p]][c("advise", "interpret")])
+    all(vapply(funs, function(f) f %in% getNamespaceExports(p), TRUE))
+  }, TRUE)
   tv_env$advisors[ok]
 }
 
 # Built-in advisors: regression with lm() and glm(), lme4, glmmTMB, mgcv,
-# aods3, vegan and brms, and the two companion
-# packages through the functions they already export (tidydiversity and
-# tidymapr 0.3.0 and later).
+# aods3, vegan and brms, and the companion packages through the functions
+# they already export (tidydiversity and tidymapr 0.3.0 and later,
+# tidyepidemio after 1.2.0).
 tv_register_builtin <- function() {
   register_advisor(
     package = "stats",
@@ -167,8 +175,29 @@ tv_register_builtin <- function() {
       if (any(c("abundance", "formula", "treatment") %in% args)) {
         return(FALSE)
       }
+      # case counts without locations belong to tidyepidemio
       nm <- tolower(names(x))
-      any(c("date", "cases", "lon", "lat", "longitude", "latitude", "presence") %in% c(nm, args))
+      any(c("lon", "lat", "longitude", "latitude", "presence") %in% c(nm, args))
+    }
+  )
+  register_advisor(
+    package = "tidyepidemio",
+    title = paste(
+      "Epidemiology: outbreaks, associations, survival, diagnostic tests,",
+      "surveillance, causal effects"
+    ),
+    questions = c("outbreak", "association", "survival", "diagnostic", "surveillance", "causal"),
+    classes = c(
+      "epi_result", "tep_rt", "tep_growth", "tep_diagnostic", "tep_mantel_haenszel",
+      "tep_surveillance", "tep_causal", "tep_survival"
+    ),
+    advise = "tep_advise",
+    interpret = "tep_interpret",
+    claims = function(x, args) {
+      if (any(c("abundance", "formula", "treatment", "lon", "lat") %in% args)) {
+        return(FALSE)
+      }
+      any(c("exposure", "outcome", "event", "test", "truth", "cases") %in% args)
     }
   )
 }

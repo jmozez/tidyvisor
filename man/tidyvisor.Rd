@@ -27,13 +27,17 @@ figure in plain sentences (\code{\link[=interpret]{interpret()}}).
 The knowledge lives in the packages that do the analyses. Each one
 registers an \emph{advisor} with tidyvisor (\code{\link[=register_advisor]{register_advisor()}}): the questions
 it answers, the results it can interpret, and how to recognise its kind of
-data. tidyvisor knows two advisors out of the box:
+data. tidyvisor knows three advisors out of the box:
 \itemize{
 \item \strong{tidydiversity} (community ecology): which ordination, constrained or
 unconstrained, linear or unimodal, and which test; interpretation of
 ordinations, principal response curves and variation partitioning.
 \item \strong{tidymapr} (spatial ecology): species distribution models, spread of
-invasions, epidemic growth, range shifts and spatial autocorrelation.
+invasions, the spread of epidemics across a landscape, range shifts and
+spatial autocorrelation.
+\item \strong{tidyepidemio} (epidemiology): outbreaks (incidence, growth, Rt),
+associations (risk, odds and rate ratios), survival, diagnostic tests,
+surveillance and causal effects.
 }
 
 Each is used when its package is installed; \code{\link[=advisors]{advisors()}} lists them.
@@ -42,7 +46,7 @@ The advice always gives its reasons, so it can be checked and overruled:
 the question, which only the analyst knows, comes first.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("tidydiversity", "vegan"))) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("tidydiversity", "vegan"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 frogs <- tidydiversity::png_frogs
 
 # Before: which analysis?

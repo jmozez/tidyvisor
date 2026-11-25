@@ -39,7 +39,7 @@ and \code{format()} returns it as a character vector, one element per line.
 \code{tv_save()} works on anything tidyvisor prints: advice from
 \code{\link[=tidyvisor]{tidyvisor()}}, \code{\link[=advise]{advise()}}, \code{\link[=tv_power]{tv_power()}} and \code{\link[=tv_practice]{tv_practice()}},
 interpretations from \code{\link[=interpret]{interpret()}}, and the advice of the packages that
-register an advisor (tidydiversity, tidymapr). Give several objects to
+register an advisor (tidydiversity, tidymapr, tidyepidemio). Give several objects to
 save a whole consultation in one file.
 }
 \examples{

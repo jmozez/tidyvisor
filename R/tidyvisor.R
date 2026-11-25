@@ -10,13 +10,17 @@
 #' The knowledge lives in the packages that do the analyses. Each one
 #' registers an *advisor* with tidyvisor ([register_advisor()]): the questions
 #' it answers, the results it can interpret, and how to recognise its kind of
-#' data. tidyvisor knows two advisors out of the box:
+#' data. tidyvisor knows three advisors out of the box:
 #'
 #' * **tidydiversity** (community ecology): which ordination, constrained or
 #'   unconstrained, linear or unimodal, and which test; interpretation of
 #'   ordinations, principal response curves and variation partitioning.
 #' * **tidymapr** (spatial ecology): species distribution models, spread of
-#'   invasions, epidemic growth, range shifts and spatial autocorrelation.
+#'   invasions, the spread of epidemics across a landscape, range shifts and
+#'   spatial autocorrelation.
+#' * **tidyepidemio** (epidemiology): outbreaks (incidence, growth, Rt),
+#'   associations (risk, odds and rate ratios), survival, diagnostic tests,
+#'   surveillance and causal effects.
 #'
 #' Each is used when its package is installed; [advisors()] lists them.
 #'
@@ -58,8 +62,9 @@ tidyvisor <- function(x, ...) {
 #' The advisor is chosen by `question`. With `question = "auto"` (the
 #' default), each installed advisor is asked whether the data and the
 #' arguments look like its kind: community data given with `abundance` or a
-#' `formula` belong to tidydiversity, dated records or case counts to
-#' tidymapr. When more than one advisor claims the data, give `question`.
+#' `formula` belong to tidydiversity, records with coordinates to tidymapr,
+#' and case counts, exposures and outcomes to tidyepidemio. When more than one
+#' advisor claims the data, give `question`.
 #'
 #' @param x A data frame.
 #' @param question What is asked, or `"auto"`. [advisors()] lists the
