@@ -256,9 +256,9 @@ tv_interpret_mixed <- function(x, level = 0.95, ...) {
   gauss <- famname == "gaussian"
   s <- list()
   s$Overview <- sprintf(
-    "%s mixed model of %s on %d observations in %s (%s family, %s link), fitted with %s.",
-    if (gauss) "Linear" else "Generalised linear", yname, n,
-    paste(sprintf("%d levels of %s", groups, names(groups)), collapse = " and "),
+    "%s %s of %s on %d observations%s (%s family, %s link), fitted with %s.",
+    if (gauss) "Linear" else "Generalised linear", if (length(groups)) "mixed model" else "model", yname, n,
+    if (length(groups)) paste0(" in ", paste(sprintf("%d levels of %s", groups, names(groups)), collapse = " and ")) else "",
     famname, link, if (tmb) "glmmTMB" else "lme4"
   )
 

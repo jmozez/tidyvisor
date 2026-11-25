@@ -43,7 +43,9 @@ tv_save <- function(..., file, append = FALSE, width = 80) {
     txt <- tv_text(objs[[i]], width = width)
     if (md) c(paste0("## `", labels[i], "`"), "", "```", txt, "```", "") else c(txt, "")
   }))
-  if (append) cat(out, file = file, sep = "\n", append = TRUE) else writeLines(out, file)
+  con <- file(file, open = if (append) "ab" else "wb")
+  on.exit(close(con), add = TRUE)
+  writeLines(enc2utf8(out), con, useBytes = TRUE)
   invisible(file)
 }
 

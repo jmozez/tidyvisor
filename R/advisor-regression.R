@@ -482,7 +482,7 @@ print.tv_advice <- function(x, ...) {
   cli::cli_h2("What the data show")
   for (i in seq_len(nrow(x$checks))) {
     r <- x$checks[i, ]
-    note <- if (nzchar(r$meaning)) paste0(": ", r$meaning) else ""
+    note <- if (nzchar(r$meaning)) paste0(" \u2014 ", r$meaning) else ""
     cli::cli_bullets(c("*" = gsub("([{}])", "\\1\\1", paste0(r$check, ": ", r$value, note))))
   }
   cli::cli_h2("Recommended")
