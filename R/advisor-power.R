@@ -172,16 +172,16 @@ tv_power <- function(design = c("two_groups", "paired", "groups", "proportions",
   )
   sens <- function(m, pw) {
     v <- tryCatch(ceiling(size(m, pw)), error = function(e) NA)
-    if (is.na(v)) "not reachable" else as.character(v)
+    if (is.na(v)) "not reachable" else paste(v, unit)
   }
   checks <- rbind(
     tv_check("Design", design),
     tv_check("Effect to detect", eff),
     tv_check("Power, significance level", sprintf("%.0f%%, %s", 100 * power, alpha)),
-    tv_check(sprintf("Needed: %s", unit), n, sprintf("%d in total", total)),
-    tv_check("If the effect is half as large", sens(0.5, power), unit),
-    tv_check("If it is twice as large", sens(2, power), unit),
-    tv_check("For 90% power", sens(1, 0.9), unit)
+    tv_check("Needed", sprintf("%d %s (%d in total)", n, unit, total)),
+    tv_check("If the effect is half as large", sens(0.5, power)),
+    tv_check("If it is twice as large", sens(2, power)),
+    tv_check("For 90% power", sens(1, 0.9))
   )
 
   code <- switch(design,
@@ -197,7 +197,7 @@ tv_power <- function(design = c("two_groups", "paired", "groups", "proportions",
   step <- function(s, rec, why, code = "") tibble::tibble(step = s, recommendation = rec, reason = why, code = code)
   advice <- rbind(
     step("Sample size", sprintf("Collect at least %d %s (%d in total)", n, unit, total),
-         sprintf("Gives a %.0f%% chance of detecting %s at the %s level; with fewer, a real effect of that size will often be missed and a non-significant result will say little.", 100 * power, eff, alpha), code),
+         sprintf("Gives %s %.0f%% chance of detecting %s at the %s level; with fewer, a real effect of that size will often be missed and a non-significant result will say little.", tv_article(100 * power), 100 * power, eff, alpha), code),
     if (design == "sites") {
       m_opts <- c(1, 2, 5, 10, 20)
       tab <- vapply(m_opts, function(k) ceiling(stats::power.t.test(delta = delta, sd = sd, power = power, sig.level = alpha)$n * (1 + (k - 1) * icc) / k), 0)

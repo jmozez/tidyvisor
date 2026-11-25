@@ -453,13 +453,31 @@ tv_vif <- function(m) {
 
 tv_p <- function(p) if (is.na(p)) "p = NA" else if (p < 0.001) "p < 0.001" else sprintf("p = %.3f", p)
 tv_num <- function(x) formatC(x, digits = 3, format = "fg", flag = "#")
+# Whole numbers (degrees of freedom, counts) print without decimals
+tv_whole <- function(x) {
+  vapply(x, function(v) if (is.finite(v) && abs(v - round(v)) < 1e-8) format(round(v)) else tv_num(v), "")
+}
+# "a" or "an" before a number read aloud (an 8, an 11, an 18, an 80...)
+tv_article <- function(x) {
+  x <- round(x)
+  if (x %in% c(11, 18) || grepl("^8", format(x))) "an" else "a"
+}
 tv_pct <- function(r) sprintf("%+.0f%%", 100 * (r - 1))
 
 # ---- Printing ----
 
+tv_heading <- function(question) {
+  switch(question %||% "",
+    practice = "good research practice",
+    power = "how many samples?",
+    design = "is the design sound?",
+    "which analysis?"
+  )
+}
+
 #' @export
 print.tv_advice <- function(x, ...) {
-  cli::cli_h1("tidyvisor: which analysis?")
+  cli::cli_h1(paste("tidyvisor:", tv_heading(x$question)))
   cli::cli_text("Question: {.strong {x$question}}")
   cli::cli_h2("What the data show")
   for (i in seq_len(nrow(x$checks))) {

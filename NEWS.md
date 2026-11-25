@@ -1,5 +1,18 @@
 # tidyvisor (development version)
 
+* `tv_save()` writes advice and interpretations to a text or Markdown file,
+  and `format()` returns them as text. In the RStudio console the advice
+  could not be captured with `capture.output()` or `sink()`.
+* Clearer printed advice:
+  - `tv_power()`: "Needed: 42 samples per group (84 in total)", and the
+    sensitivity lines read "162 samples per group"; "an 80% chance".
+  - Headings name the question: "good research practice", "how many
+    samples?", "is the design sound?".
+  - Degrees of freedom of a test print as whole numbers (`df = 5`).
+  - The design audit names each group: "Diet 1: 20, Diet 2: 10".
+  - Placeholders in suggested code are marked, e.g.
+    `delta = <difference to detect>`.
+
 * Website: a full user guide in eight chapters (research practice, power,
   assumptions, regression, mixed and additive models, Bayesian models,
   community and spatial ecology, writing an advisor) and two tutorials
