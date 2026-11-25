@@ -45,8 +45,8 @@ repo:
 navbar:
   bg: dark
   structure:
-    left: [intro, userguide, tutorials, reference, news]
-    right: [tidydiversity, tidymapr, search, github]
+    left: [intro, userguide, tutorials, reference, news, tidydiversity, tidymapr, search, github]
+    right: []
   components:
     github:
       icon: fa-github
