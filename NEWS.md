@@ -1,5 +1,22 @@
 # tidyvisor (development version)
 
+* Publication advice. Every interpretation of a test or a model ends with
+  a section "For the paper":
+  - a sentence for the Results with the numbers in the usual order
+    ("count differed among levels of spray (Kruskal-Wallis rank sum test;
+    H(5) = 54.7, p < 0.001)"); factor levels in words against the reference
+    level, and ratios or odds ratios for log and logit models;
+  - the figure to make, with `ggplot2` or `ggeffects` code that uses the
+    data's own names and `ggsave()` at a journal column width, and the rules
+    for journal figures (raw data shown, units, colour-blind-safe palettes,
+    vector formats, text size);
+  - the table to make (with `gtsummary` or `broom` code for models), and
+    what the Methods must state (test or model, software and versions).
+  Assumption tests are flagged as checks, not results.
+* `tv_practice("report")` adds advice on figures to a journal's
+  specification, lean tables, reporting each statistical result in full,
+  and describing the analysis so it can be repeated.
+
 * After an overall test, the interpretation says what to do next in a new
   section, "After the overall test":
   - significant, with three or more groups: go on to post hoc comparisons,

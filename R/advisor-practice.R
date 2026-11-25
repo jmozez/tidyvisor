@@ -109,7 +109,11 @@ tv_practice <- function(stage = c("all", "plan", "collect", "analyse", "report")
     r("Report", "Follow the reporting guideline for the study type", tv_guideline(field, design)),
     r("Report", "Report everything that was done", "All measured variables, all analyses run, exclusions and why, and deviations from the pre-registered plan; non-significant results too."),
     r("Report", "Share the data and the code", "Deposit them in a repository with a DOI (Dryad, Zenodo, OSF, Figshare) under an open licence, with the metadata."),
-    r("Report", "Show the data in the figures", "Plot the raw points with the estimates and intervals, not bars alone; give the sample size of each group.")
+    r("Report", "Show the data in the figures", "Plot the raw points with the estimates and intervals, not bars alone ('dynamite plots' hide the data); give the sample size of each group, and say in the caption what the error bars are (SD, SE or 95% CI)."),
+    r("Report", "Make figures to the journal's specification", "Width of one column (about 85 mm) or the page (about 180 mm); text at least 8 pt at that size; axis labels with units; a colour-blind-safe palette (Okabe-Ito, viridis), never red against green; no 3D, pie or dual-axis charts; vector PDF or SVG, or 600 dpi for raster images.", "ggplot2::ggsave(\"figure1.pdf\", width = 85, height = 70, units = \"mm\")"),
+    r("Report", "Keep tables lean and consistent", "Only the numbers a reader needs: estimates with 95% CI, n, and test results; the same number of decimals within a column (two or three significant figures); units in the column headers; horizontal rules only; abbreviations explained in a footnote.", "gtsummary::tbl_regression(m)   # or flextable / gt for your own table"),
+    r("Report", "Report each statistical result in full", "The test, the statistic with its degrees of freedom, the exact p-value (p < 0.001 below that; never p = 0.000), and the effect size with its 95% CI, e.g. 'H(5) = 54.7, p < 0.001'. Say how multiple comparisons were adjusted, and give non-significant results the same way."),
+    r("Report", "Describe the analysis so it can be repeated", "Methods: each model's formula, family and link; random effects; how assumptions were checked and what was done when they failed; how predictors were chosen; the software and package versions, cited.", "citation(); sessionInfo()   # or grateful::cite_packages()")
   )
   advice <- switch(stage,
     plan = plan, collect = collect, analyse = analyse, report = report,
