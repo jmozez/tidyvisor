@@ -338,6 +338,7 @@ tv_interpret_mixed <- function(x, level = 0.95, ...) {
   }
   s$Diagnostics <- if (length(diag)) diag else "No problems found by the checks run."
   s$`After the overall test` <- tv_posthoc_model(x)
+  s$`For the paper` <- tv_publication_model(x, e$table, link = link, yname = yname, mixed = length(groups) > 0)
   s$`Reading the plots` <- c(
     "Plot residuals against fitted values (look for curves or a funnel) and a Q-Q plot of the random effects (lattice::qqmath(lme4::ranef(m))).",
     "For generalised models, simulated residuals (DHARMa::simulateResiduals(m)) are easier to read than raw residuals."

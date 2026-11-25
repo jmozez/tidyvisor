@@ -273,6 +273,7 @@ tv_interpret_htest <- function(x, ...) {
     ),
     "Report the estimate and its interval as well as the p-value."
   )
+  s$`For the paper` <- tv_publication_htest(x, kind, sig)
   structure(list(sections = s, tables = list()), class = "tv_interpretation")
 }
 

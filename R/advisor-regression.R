@@ -315,6 +315,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
     s$`What to do next` <- tv_lm_remedies(x, flag)
   }
 
+  s$`For the paper` <- tv_publication_model(x, tab, link = link, yname = yname)
   s$`Reading the plots` <- c(
     "plot(model) shows four diagnostics: residuals against fitted values (look for curves or a funnel), the normal Q-Q plot, scale-location (spread against fitted values) and residuals against leverage (influential points).",
     "Plot each effect on the response scale, with its confidence band, rather than the coefficients alone."
