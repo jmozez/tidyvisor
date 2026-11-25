@@ -11,13 +11,15 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 **tidyvisor** is a chief statistician for R. It advises at every stage
 of a study, in any field:
 
-| Stage            | Ask                               | tidyvisor gives                                                                                                                                 |
-|------------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| Planning         | `tv_practice("plan")`             | good research practice: the question, the unit of replication, randomisation, controls, pre-registration                                        |
-| Before fieldwork | `tv_power()`                      | the samples, traps, plots or sites needed to detect the effect that matters                                                                     |
-| With the data    | `tidyvisor(data, ...)`            | a data audit (missing values, pseudoreplication, confounding), the analysis, the test, the plots and the code; what to do when assumptions fail |
-| With the result  | `tidyvisor(result)`               | the numbers in plain sentences, the diagnostics and what to do next                                                                             |
-| Reporting        | `tv_practice("report", field = )` | the reporting guideline for the field and what to share                                                                                         |
+| Stage                  | Ask                               | tidyvisor gives                                                                                                                                    |
+|------------------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Planning               | `tv_practice("plan")`             | good research practice: the question, the unit of replication, randomisation, controls, pre-registration                                           |
+| Before fieldwork       | `tv_power()`                      | the samples, traps, plots or sites needed to detect the effect that matters                                                                        |
+| With the data          | `tidyvisor(data, ...)`            | a data audit (missing values, pseudoreplication, confounding), the analysis, the test, the plots and the code; what to do when assumptions fail    |
+| With the result        | `tidyvisor(result)`               | the numbers in plain sentences, the diagnostics and what to do next                                                                                |
+| After the overall test | `tidyvisor(result)`               | whether to go on to post hoc comparisons and which ones (Tukey, Games-Howell, Dunn, `emmeans`), or, when the result is not significant, why not to |
+| Writing the paper      | `tidyvisor(result)`               | a sentence for the Results with the numbers in the usual order, the figure and the table to make (with code), and what the Methods must state      |
+| Reporting              | `tv_practice("report", field = )` | the reporting guideline for the field, journal-ready figures and tables, and what to share                                                         |
 
 It always gives its reasons, so its advice can be checked and overruled.
 The question, which only you know, comes first. Website:
@@ -277,6 +279,188 @@ tidyvisor(ord)
 #>   variable arrows) approximate their correlations; distances between sites are
 #>   only approximate.
 ```
+
+## After the overall test, and for the paper
+
+Every interpretation of a test or a model ends with two sections. *After
+the overall test* says whether to go on to post hoc comparisons: with a
+significant result and three or more groups, which comparisons suit the
+test, with code that uses your column names; with a non-significant
+result, not to test every pair. *For the paper* gives a sentence for the
+Results, the figure and the table to make, with code, and what the
+Methods must state.
+
+``` r
+tidyvisor(kruskal.test(count ~ spray, data = InsectSprays))
+#> 
+#> ── tidyvisor: what the results show ────────────────────────────────────────────
+#> 
+#> ── Overview ──
+#> 
+#> • Kruskal-Wallis rank sum test on count by spray.
+#> 
+#> ── Result ──
+#> 
+#> • Kruskal-Wallis chi-squared = 54.7 (df = 5), p < 0.001.
+#> 
+#> ── Meaning ──
+#> 
+#> • Values in one group tend to be larger than in another. Rank tests compare
+#>   whole distributions, not means: report medians or the location shift with its
+#>   interval, not a difference in means.
+#> • A p-value is not the size of an effect: always report the estimate and its
+#>   interval, and a non-significant result is not evidence of no difference.
+#> 
+#> ── After the overall test ──
+#> 
+#> • The overall test shows that the 6 groups are not all alike; it does not say
+#>   which differ. Go on to post hoc comparisons of every pair, with p-values
+#>   adjusted for the number of comparisons.
+#> • Rank-based pairs (the follow-up to Kruskal-Wallis):
+#>   pairwise.wilcox.test(data$count, data$spray, p.adjust.method = "holm"), or a
+#>   Dunn test (FSA::dunnTest(count ~ spray, data = data, method = "holm")).
+#> • Report each pair as a median difference or Hodges-Lehmann shift with its
+#>   interval (wilcox.test(conf.int = TRUE)), not only adjusted p-values.
+#> • Decide which pairs matter before looking: if only comparisons with a control
+#>   are of interest, test those alone (Dunnett, or Holm on that smaller set);
+#>   fewer comparisons keep more power.
+#> 
+#> ── What to do next ──
+#> 
+#> • For an effect size, wilcox.test(conf.int = TRUE) gives the Hodges-Lehmann
+#>   shift with its interval.
+#> • If the data are positive and right-skewed, a test on the log scale (or a
+#>   Gamma GLM) gives a ratio of means, which is often easier to report.
+#> 
+#> ── For the paper ──
+#> 
+#> • Results: 'count differed among levels of spray (Kruskal-Wallis rank sum test;
+#>   H(5) = 54.7, p < 0.001).'
+#> • Report the statistic with its degrees of freedom, the exact p-value (p <
+#>   0.001 below that), and the effect size with its interval; never 'p = 0.000'
+#>   or 'n.s.' alone.
+#> • Figure:
+#> • ggplot2::ggplot(data, ggplot2::aes(spray, count)) +
+#>   ggplot2::geom_boxplot(outlier.shape = NA, width = 0.5) +
+#>   ggplot2::geom_jitter(width = 0.15, alpha = 0.6) +
+#>   ggplot2::theme_classic(base_size = 9)
+#> • ggplot2::ggsave("figure1.pdf", width = 85, height = 70, units = "mm") # one
+#>   journal column
+#> • Figure style for journals: show the raw data with the estimates, give n per
+#>   group in the caption, label axes with units, use a colour-blind-safe palette
+#>   (Okabe-Ito, viridis) and no 3D, pie or dual-axis charts; text at least 8 pt
+#>   at final size; save as PDF or SVG (vector) at the journal's column width
+#>   (about 85 mm single, 180 mm double), or 600 dpi for raster images.
+#> • Table: one row per level of spray with n and the median and interquartile
+#>   range; the test in a footnote, and any post hoc results as letters or a
+#>   pairwise table with adjusted p-values.
+#> • Methods: name the test (Kruskal-Wallis rank sum test), the software and
+#>   version (R 4.3.3, citation()), any adjustment for multiple comparisons, and
+#>   the significance level.
+```
+
+For models, each factor with three or more levels is tested; when it
+matters, its levels are compared with `emmeans`, and the effects are
+written out in words against the reference level:
+
+``` r
+tidyvisor(glm(count ~ spray, family = poisson, data = InsectSprays))
+#> 
+#> ── tidyvisor: what the results show ────────────────────────────────────────────
+#> 
+#> ── Overview ──
+#> 
+#> • Generalised linear model of count on 72 observations (poisson family, log
+#>   link).
+#> 
+#> ── Fit ──
+#> 
+#> • The predictors explain 76.0% of the deviance (the GLM analogue of R-squared).
+#> • Against a model with no predictors: likelihood-ratio chi-squared = 310.7 on 5
+#>   df, p < 0.001.
+#> 
+#> ── Effects ──
+#> 
+#> • sprayB: spray = B (compared with spray = A) multiplies the expected count by
+#>   1.06 (+6%; 95% CI 0.860 to 1.30), p = 0.597.
+#> • sprayC: spray = C (compared with spray = A) multiplies the expected count by
+#>   0.144 (-86%; 95% CI 0.0945 to 0.218), p < 0.001.
+#> • sprayD: spray = D (compared with spray = A) multiplies the expected count by
+#>   0.339 (-66%; 95% CI 0.252 to 0.456), p < 0.001.
+#> • sprayE: spray = E (compared with spray = A) multiplies the expected count by
+#>   0.241 (-76%; 95% CI 0.172 to 0.338), p < 0.001.
+#> • sprayF: spray = F (compared with spray = A) multiplies the expected count by
+#>   1.15 (+15%; 95% CI 0.938 to 1.41), p = 0.179.
+#> • Effects on the log or logit scale are multiplicative: they combine by
+#>   multiplying, and a factor of 1 means no effect.
+#> • Each effect is estimated with the other predictors held fixed.
+#> 
+#> ── Diagnostics ──
+#> 
+#> • Overdispersion: Pearson statistic / residual df = 1.51 (expected about 1).
+#>   Standard errors and p-values are too small; refit with a negative binomial
+#>   model (MASS::glm.nb()) or family = quasipoisson.
+#> • Influence: no observation dominates the fit (largest Cook's distance 0.19,
+#>   row 27; values above 1 would be a concern).
+#> 
+#> ── After the overall test ──
+#> 
+#> • spray (6 levels) has an overall effect (p < 0.001): the levels are not all
+#>   alike. Go on to post hoc comparisons of every pair, adjusted for the number
+#>   of comparisons; the coefficients above only compare each level with the
+#>   reference level A.
+#> • emmeans::emmeans(m, pairwise ~ spray, type = "response") # Tukey-adjusted
+#>   pairs, with intervals
+#> • If only comparisons with a control matter, decide so before looking and use
+#>   emmeans::emmeans(m, trt.vs.ctrl ~ spray, type = "response") (Dunnett; the
+#>   first level, A, is the control), which keeps more power.
+#> 
+#> ── For the paper ──
+#> 
+#> • Results (strongest evidence first; each factor level is compared with the
+#>   reference level):
+#> • 'count was 0.144 times as high for spray = C as for spray = A (95% CI 0.0945
+#>   to 0.218, p < 0.001).'
+#> • 'count was 0.241 times as high for spray = E as for spray = A (95% CI 0.172
+#>   to 0.338, p < 0.001).'
+#> • 'count was 0.339 times as high for spray = D as for spray = A (95% CI 0.252
+#>   to 0.456, p < 0.001).'
+#> • The model is on the log scale, so effects are reported as ratios of means
+#>   (exponentiated coefficients) with their intervals.
+#> • Report every term of the model, not only the significant ones, with the
+#>   estimate, its 95% CI and the p-value; give n, and the fit (R-squared, or
+#>   deviance explained, or the random-effect SDs for a mixed model).
+#> • Figure: model predictions with their confidence band over the raw data, one
+#>   panel per focal predictor:
+#> • ggeffects::ggpredict(m, terms = "spray") |> plot(show_data = TRUE)
+#> • ggplot2::ggsave("figure1.pdf", width = 85, height = 70, units = "mm") # one
+#>   journal column
+#> • Figure style for journals: show the raw data with the estimates, give n per
+#>   group in the caption, label axes with units, use a colour-blind-safe palette
+#>   (Okabe-Ito, viridis) and no 3D, pie or dual-axis charts; text at least 8 pt
+#>   at final size; save as PDF or SVG (vector) at the journal's column width
+#>   (about 85 mm single, 180 mm double), or 600 dpi for raster images.
+#> • Table: one row per term with the estimate, 95% CI and p-value (and the
+#>   random-effect SDs for a mixed model):
+#> • gtsummary::tbl_regression(m, exponentiate = TRUE) # or broom::tidy(m,
+#>   conf.int = TRUE, exponentiate = TRUE) for your own table
+#> • Methods: the model formula, the family and link, how the model was checked,
+#>   the software and packages with versions (R 4.3.3; citation("stats")), and how
+#>   the predictors were chosen (before seeing the data, or how).
+#> 
+#> ── Reading the plots ──
+#> 
+#> • plot(model) shows four diagnostics: residuals against fitted values (look for
+#>   curves or a funnel), the normal Q-Q plot, scale-location (spread against
+#>   fitted values) and residuals against leverage (influential points).
+#> • Plot each effect on the response scale, with its confidence band, rather than
+#>   the coefficients alone.
+```
+
+`tv_practice("report")` lists the rules for publication: figures at the
+journal’s width with the raw data, units and colour-blind-safe palettes;
+lean tables; each statistical result in full; and Methods that can be
+repeated.
 
 ## Statistical models
 
