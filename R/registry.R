@@ -75,7 +75,15 @@ tv_env$advisors <- list()
 # built-in advisor with its own registration.
 tv_registry <- function() {
   regs <- tv_env$advisors
-  ok <- vapply(names(regs), function(p) requireNamespace(p, quietly = TRUE), TRUE)
+  ok <- vapply(names(regs), function(p) {
+    if (!requireNamespace(p, quietly = TRUE)) {
+      return(FALSE)
+    }
+    # a built-in advisor names functions the package exports; an older
+    # version without them is skipped rather than failing when called
+    funs <- Filter(is.character, regs[[p]][c("advise", "interpret")])
+    all(vapply(funs, function(f) f %in% getNamespaceExports(p), TRUE))
+  }, TRUE)
   tv_env$advisors[ok]
 }
 
