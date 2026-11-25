@@ -190,6 +190,8 @@ tv_advise_regression <- function(x, question = "regression", response, predictor
 #' @rdname regression-advisor
 #' @export
 tv_interpret_regression <- function(x, level = 0.95, ...) {
+  # an aov() fit is a linear model; read it as one
+  if (inherits(x, "aov")) class(x) <- setdiff(class(x), "aov")
   is_glm <- inherits(x, "glm")
   fam <- if (is_glm) stats::family(x) else stats::gaussian()
   link <- fam$link
@@ -308,6 +310,7 @@ tv_interpret_regression <- function(x, level = 0.95, ...) {
     ))
   }
   s$Diagnostics <- if (length(diag)) diag else "No problems found by the checks run."
+  s$`After the overall test` <- tv_posthoc_model(x)
   if (!is_glm || fam$family == "gaussian") {
     s$`What to do next` <- tv_lm_remedies(x, flag)
   }

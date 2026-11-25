@@ -241,6 +241,8 @@ tv_interpret_htest <- function(x, ...) {
     s$Meaning <- c(s$Meaning, "A p-value is not the size of an effect: always report the estimate and its interval, and a non-significant result is not evidence of no difference.")
   }
 
+  s$`After the overall test` <- tv_posthoc_htest(x, kind, sig)
+
   s$`What to do next` <- switch(kind,
     normality = if (sig) c(
       "Positive, right-skewed data: try a log transformation (or find the best power with MASS::boxcox()), then test again on the new scale.",
@@ -254,11 +256,9 @@ tv_interpret_htest <- function(x, ...) {
     ) else "Either Student's or Welch's test is fine; Welch's costs almost nothing when spreads are equal.",
     welch = , student = c(
       "Check the assumptions on the residuals: shapiro.test() per group and a box plot; for unequal spread use Welch (the default of t.test()).",
-      if (grepl("ANOVA|one-way|oneway", meth, ignore.case = TRUE) && sig) "Which groups differ: TukeyHSD(aov(...)) for equal spreads, or pairwise.t.test(pool.sd = FALSE, p.adjust.method = \"holm\") for unequal spreads.",
       "If the residuals are skewed or have outliers, compare with a rank test (wilcox.test(), kruskal.test()) or a robust test on trimmed means (WRS2)."
     ),
     rank = c(
-      if (grepl("Kruskal", meth) && sig) "Which groups differ: pairwise.wilcox.test(y, group, p.adjust.method = \"holm\") or a Dunn test.",
       "For an effect size, wilcox.test(conf.int = TRUE) gives the Hodges-Lehmann shift with its interval.",
       "If the data are positive and right-skewed, a test on the log scale (or a Gamma GLM) gives a ratio of means, which is often easier to report."
     ),
