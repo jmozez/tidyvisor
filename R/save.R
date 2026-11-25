@@ -8,7 +8,7 @@
 #' `tv_save()` works on anything tidyvisor prints: advice from
 #' [tidyvisor()], [advise()], [tv_power()] and [tv_practice()],
 #' interpretations from [interpret()], and the advice of the packages that
-#' register an advisor (tidydiversity, tidymapr). Give several objects to
+#' register an advisor (tidydiversity, tidymapr, tidyepidemio). Give several objects to
 #' save a whole consultation in one file.
 #'
 #' @param ... Objects to save, such as the results of [tidyvisor()].

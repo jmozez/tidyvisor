@@ -1,5 +1,11 @@
 # tidyvisor (development version)
 
+* A third companion: tidyepidemio (epidemiology). `tidyvisor()` hands it
+  case counts, exposures and outcomes, and its results (ratios, Rt, growth,
+  diagnostic accuracy, surveillance alerts, standardized effects, survival
+  curves); `advisors()` lists it. tidymapr keeps the spatial side of
+  epidemics and no longer claims case counts without locations.
+
 * Publication advice. Every interpretation of a test or a model ends with
   a section "For the paper":
   - a sentence for the Results with the numbers in the usual order

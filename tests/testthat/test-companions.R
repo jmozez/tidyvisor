@@ -22,3 +22,17 @@ test_that("tidymapr data and results go to tidymapr", {
   g <- tidymapr::epi_growth_rate(cases, date = week, cases = n, unit = "week")
   expect_s3_class(tidyvisor(g), "tmr_interpretation")
 })
+
+test_that("epidemiological data and results go to tidyepidemio", {
+  skip_if_not_installed("tidyepidemio")
+  skip_if_not(exists("tep_advise", asNamespace("tidyepidemio")))
+  d <- data.frame(exposure = rep(0:1, each = 40), outcome = rep(c(0, 1, 0, 1), c(30, 10, 18, 22)))
+  expect_s3_class(tidyvisor(d, exposure = "exposure", outcome = "outcome"), "tep_advice")
+  rr <- tidyepidemio::epi_risk_ratio(d, exposure, outcome)
+  expect_s3_class(tidyvisor(rr), "tep_interpretation")
+  counts <- data.frame(day = 1:8, cases = c(2, 3, 5, 8, 12, 20, 31, 50))
+  expect_s3_class(
+    tidyvisor(counts, question = "outbreak", time = "day", cases = "cases"),
+    "tep_advice"
+  )
+})

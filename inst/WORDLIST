@@ -29,6 +29,7 @@ Feinstein
 Fligner
 Gabry
 Gelman
+Haenszel
 Harrell
 Hurlbert
 Ieno
@@ -100,6 +101,7 @@ mgcv
 modeling
 moses
 nd
+nowcasting
 overfit
 pg
 pnguot
@@ -116,6 +118,7 @@ ter
 testthat
 tibble
 tidydiversity
+tidyepidemio
 tidymapr
 tidyvisor
 withr

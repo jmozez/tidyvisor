@@ -80,9 +80,9 @@ tv_registry <- function() {
 }
 
 # Built-in advisors: regression with lm() and glm(), lme4, glmmTMB, mgcv,
-# aods3, vegan and brms, and the two companion
-# packages through the functions they already export (tidydiversity and
-# tidymapr 0.3.0 and later).
+# aods3, vegan and brms, and the companion packages through the functions
+# they already export (tidydiversity and tidymapr 0.3.0 and later,
+# tidyepidemio after 1.2.0).
 tv_register_builtin <- function() {
   register_advisor(
     package = "stats",
@@ -167,8 +167,29 @@ tv_register_builtin <- function() {
       if (any(c("abundance", "formula", "treatment") %in% args)) {
         return(FALSE)
       }
+      # case counts without locations belong to tidyepidemio
       nm <- tolower(names(x))
-      any(c("date", "cases", "lon", "lat", "longitude", "latitude", "presence") %in% c(nm, args))
+      any(c("lon", "lat", "longitude", "latitude", "presence") %in% c(nm, args))
+    }
+  )
+  register_advisor(
+    package = "tidyepidemio",
+    title = paste(
+      "Epidemiology: outbreaks, associations, survival, diagnostic tests,",
+      "surveillance, causal effects"
+    ),
+    questions = c("outbreak", "association", "survival", "diagnostic", "surveillance", "causal"),
+    classes = c(
+      "epi_result", "tep_rt", "tep_growth", "tep_diagnostic", "tep_mantel_haenszel",
+      "tep_surveillance", "tep_causal", "tep_survival"
+    ),
+    advise = "tep_advise",
+    interpret = "tep_interpret",
+    claims = function(x, args) {
+      if (any(c("abundance", "formula", "treatment", "lon", "lat") %in% args)) {
+        return(FALSE)
+      }
+      any(c("exposure", "outcome", "event", "test", "truth", "cases") %in% args)
     }
   )
 }

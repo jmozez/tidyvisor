@@ -30,10 +30,11 @@ The question, which only you know, comes first. Website:
 The knowledge lives in the packages that do the analyses. Each registers
 an *advisor* with tidyvisor, and one `tidyvisor()` serves them all:
 
-| Package                                               | Field             | Advises on                                                                                                                                                                                                                                            |
-|-------------------------------------------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Package | Field | Advises on |
+|---|---|---|
 | [tidydiversity](https://tidydiversity.in4metrix.dev/) | Community ecology | Which ordination: unconstrained or constrained, linear or unimodal; which test; ordinations, principal response curves and variation partitioning; canonical variate analysis, trait-environment analyses (dc-CA, RLQ) and co-correspondence analysis |
-| [tidymapr](https://tidymapr.in4metrix.dev/)           | Spatial ecology   | Species distribution models, the spread of invasions, epidemic growth and R, range shifts, spatial autocorrelation, variation partitioning between environment and space                                                                              |
+| [tidymapr](https://tidymapr.in4metrix.dev/) | Spatial ecology | Species distribution models, the spread of invasions, the spread of epidemics across a landscape, range shifts, spatial autocorrelation, variation partitioning between environment and space |
+| [tidyepidemio](https://jmozez.github.io/tidyepidemio/) | Epidemiology | Outbreaks (incidence, growth, Rt, nowcasting), associations (risk, odds and rate ratios, Mantel-Haenszel), survival, diagnostic tests, surveillance, causal effects (g-computation, weighting) |
 
 Other packages can join with `register_advisor()`.
 
