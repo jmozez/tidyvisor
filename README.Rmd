@@ -22,7 +22,9 @@ a study, in any field:
 | Before fieldwork | `tv_power()` | the samples, traps, plots or sites needed to detect the effect that matters |
 | With the data | `tidyvisor(data, ...)` | a data audit (missing values, pseudoreplication, confounding), the analysis, the test, the plots and the code; what to do when assumptions fail |
 | With the result | `tidyvisor(result)` | the numbers in plain sentences, the diagnostics and what to do next |
-| Reporting | `tv_practice("report", field = )` | the reporting guideline for the field and what to share |
+| After the overall test | `tidyvisor(result)` | whether to go on to post hoc comparisons and which ones (Tukey, Games-Howell, Dunn, `emmeans`), or, when the result is not significant, why not to |
+| Writing the paper | `tidyvisor(result)` | a sentence for the Results with the numbers in the usual order, the figure and the table to make (with code), and what the Methods must state |
+| Reporting | `tv_practice("report", field = )` | the reporting guideline for the field, journal-ready figures and tables, and what to share |
 
 It always gives its reasons, so its advice can be checked and overruled. The
 question, which only you know, comes first. Website:
@@ -104,6 +106,32 @@ ord <- tidydiversity::ord_fit(frogs,
 )
 tidyvisor(ord)
 ```
+
+## After the overall test, and for the paper
+
+Every interpretation of a test or a model ends with two sections. *After the
+overall test* says whether to go on to post hoc comparisons: with a
+significant result and three or more groups, which comparisons suit the test,
+with code that uses your column names; with a non-significant result, not to
+test every pair. *For the paper* gives a sentence for the Results, the figure
+and the table to make, with code, and what the Methods must state.
+
+```{r paper}
+tidyvisor(kruskal.test(count ~ spray, data = InsectSprays))
+```
+
+For models, each factor with three or more levels is tested; when it matters,
+its levels are compared with `emmeans`, and the effects are written out in
+words against the reference level:
+
+```{r paper-model}
+tidyvisor(glm(count ~ spray, family = poisson, data = InsectSprays))
+```
+
+`tv_practice("report")` lists the rules for publication: figures at the
+journal's width with the raw data, units and colour-blind-safe palettes;
+lean tables; each statistical result in full; and Methods that can be
+repeated.
 
 ## Statistical models
 

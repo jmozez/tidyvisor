@@ -72,6 +72,35 @@ m <- lm(mpg ~ wt + hp, data = mtcars)
 tidyvisor(m)
 ```
 
+## After the overall test
+
+A significant test with three or more groups says that the groups are not all
+alike, not which differ. tidyvisor says whether to go on to post hoc
+comparisons, which ones suit the test, and, when the result is not
+significant, why not to test every pair.
+
+```{r}
+kw <- kruskal.test(count ~ spray, data = InsectSprays)
+tidyvisor(kw)$sections$`After the overall test`
+```
+
+## Write it up for the paper
+
+Each interpretation ends with a sentence for the Results, the figure and the
+table to make (with code that uses your column names and saves the figure at a
+journal's column width), and what the Methods must state.
+
+```{r}
+tidyvisor(kw)$sections$`For the paper`
+```
+
+The rules for publication, from figures to the software citation, are in the
+reporting stage of `tv_practice()`:
+
+```{r}
+tv_practice("report")
+```
+
 ## Save the advice
 
 Keep the advice with the analysis: `tv_save()` writes it to a file, a
