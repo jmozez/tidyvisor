@@ -36,7 +36,8 @@ tv_save <- function(..., file, append = FALSE, width = 80) {
   if (missing(file) || !is.character(file) || length(file) != 1) {
     cli::cli_abort("Give {.arg file}, the path of the file to write.")
   }
-  labels <- vapply(as.list(substitute(list(...)))[-1], function(e) paste(deparse(e, width.cutoff = 500L), collapse = " "), "")
+  exprs <- as.list(substitute(list(...)))[-1]
+  labels <- vapply(exprs, function(e) paste(deparse(e, width.cutoff = 500L), collapse = " "), "")
   md <- grepl("\\.(md|qmd|rmd)$", file, ignore.case = TRUE)
   out <- unlist(lapply(seq_along(objs), function(i) {
     txt <- tv_text(objs[[i]], width = width)
