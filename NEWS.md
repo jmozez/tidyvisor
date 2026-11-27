@@ -2,9 +2,13 @@
 
 * A third companion: tidyepidemio (epidemiology). `tidyvisor()` hands it
   case counts, exposures and outcomes, and its results (ratios, Rt, growth,
-  diagnostic accuracy, surveillance alerts, standardized effects, survival
+  diagnostic accuracy, surveillance alerts, standardised effects, survival
   curves); `advisors()` lists it. tidymapr keeps the spatial side of
   epidemics and no longer claims case counts without locations.
+
+* tidyepidemio is in Suggests and Remotes, the installation steps include it,
+  and the package description names all three companions. The package
+  language is now New Zealand English (`Language: en-NZ`).
 
 * Publication advice. Every interpretation of a test or a model ends with
   a section "For the paper":

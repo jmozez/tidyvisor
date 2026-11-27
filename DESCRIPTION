@@ -14,7 +14,8 @@ Description: A chief statistician for R. Before the data are collected,
     plain sentences, with its reasons, so the advice can be checked and
     overruled. Specialised knowledge lives in the packages that do the
     analyses, each of which registers an advisor: 'tidydiversity' for
-    community ecology and 'tidymapr' for spatial ecology.
+    community ecology, 'tidymapr' for spatial ecology and spatial
+    epidemiology, and 'tidyepidemio' for epidemiology.
 License: MIT + file LICENSE
 URL: https://tidyvisor.in4metrix.dev/, https://github.com/jmozez/tidyvisor
 BugReports: https://github.com/jmozez/tidyvisor/issues
@@ -40,14 +41,16 @@ Suggests:
     testthat (>= 3.0.0),
     tidydiversity (>= 0.3.0),
     tidymapr (>= 0.3.0),
+    tidyepidemio,
     vegan,
     withr
 Remotes: 
     jmozez/tidydiversity,
-    jmozez/tidymapr
+    jmozez/tidymapr,
+    jmozez/tidyepidemio
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
-Language: en-GB
+Language: en-NZ
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.1
