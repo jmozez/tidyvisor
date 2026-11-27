@@ -475,6 +475,9 @@ tv_heading <- function(question) {
     practice = "good research practice",
     power = "how many samples?",
     design = "is the design sound?",
+    "model check" = "does the model fit?",
+    confounding = "could confounding explain it?",
+    equivalence = "is the difference negligible?",
     "which analysis?"
   )
 }
