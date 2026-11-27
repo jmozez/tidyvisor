@@ -10,7 +10,16 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/jmozez/tidyvisor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jmozez/tidyvisor/actions/workflows/R-CMD-check.yaml)
+[![Tests and coverage](https://github.com/jmozez/tidyvisor/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/jmozez/tidyvisor/actions/workflows/test-coverage.yaml)
+[![Lint](https://github.com/jmozez/tidyvisor/actions/workflows/lint.yaml/badge.svg)](https://github.com/jmozez/tidyvisor/actions/workflows/lint.yaml)
+[![Website deploy](https://github.com/jmozez/tidyvisor/actions/workflows/vercel.yaml/badge.svg)](https://github.com/jmozez/tidyvisor/actions/workflows/vercel.yaml)
+[![GitHub](https://img.shields.io/badge/source-GitHub-181717?logo=github)](https://github.com/jmozez/tidyvisor)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jmozez/tidyvisor/blob/main/LICENSE.md)
+[![Website](https://img.shields.io/badge/website-tidyvisor.in4metrix.dev-1A9E93)](https://tidyvisor.in4metrix.dev)
+[![Diversity with tidydiversity](https://img.shields.io/badge/diversity%20with-tidydiversity-1A9E93)](https://tidydiversity.in4metrix.dev)
+[![Maps with tidymapr](https://img.shields.io/badge/maps%20with-tidymapr-11376B)](https://tidymapr.in4metrix.dev)
+[![Epidemiology with tidyepidemio](https://img.shields.io/badge/epidemiology%20with-tidyepidemio-1B3F73)](https://tidyepidemio.in4metrix.dev)
 <!-- badges: end -->
 
 **tidyvisor** is a chief statistician for R. It advises at every stage of
@@ -39,7 +48,7 @@ The knowledge lives in the packages that do the analyses. Each registers an
 |---|---|---|
 | [tidydiversity](https://tidydiversity.in4metrix.dev/) | Community ecology | Which ordination: unconstrained or constrained, linear or unimodal; which test; ordinations, principal response curves and variation partitioning; canonical variate analysis, trait-environment analyses (dc-CA, RLQ) and co-correspondence analysis |
 | [tidymapr](https://tidymapr.in4metrix.dev/) | Spatial ecology | Species distribution models, the spread of invasions, the spread of epidemics across a landscape, range shifts, spatial autocorrelation, variation partitioning between environment and space |
-| [tidyepidemio](https://jmozez.github.io/tidyepidemio/) | Epidemiology | Outbreaks (incidence, growth, Rt, nowcasting), associations (risk, odds and rate ratios, Mantel-Haenszel), survival, diagnostic tests, surveillance, causal effects (g-computation, weighting) |
+| [tidyepidemio](https://tidyepidemio.in4metrix.dev/) | Epidemiology | Outbreaks (incidence, growth, Rt, nowcasting), associations (risk, odds and rate ratios, Mantel-Haenszel), survival, diagnostic tests, surveillance, causal effects (g-computation, weighting) |
 
 Other packages can join with `register_advisor()`.
 
