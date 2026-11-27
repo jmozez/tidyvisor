@@ -145,6 +145,11 @@ reference:
       - compare-advisor
       - model-advisors
       - brms-advisor
+  - title: Model checks, equivalence and confounding
+    contents:
+      - tv_check_model
+      - tv_equivalence
+      - tv_evalue
   - title: Community ecology
     contents:
       - vegan-advisor

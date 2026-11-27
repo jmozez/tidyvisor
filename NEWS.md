@@ -1,5 +1,20 @@
 # tidyvisor (development version)
 
+* Three new tools from current statistical practice, each returning advice
+  with its reasons and a sentence for the paper:
+  - `tv_check_model()` checks a fitted model with scaled residuals from
+    simulations of the model (Dunn and Smyth 1996; the DHARMa method of
+    Hartig), with tests of uniformity, dispersion, zero inflation and
+    outliers, for `lm()`, `glm()`, `MASS::glm.nb()`, lme4 and glmmTMB
+    models.
+  - `tv_equivalence()` tests whether a difference is small enough to
+    ignore, with two one-sided tests (TOST; Schuirmann 1987, Lakens 2017),
+    so "no difference" is never claimed from a non-significant test.
+  - `tv_evalue()` gives the E-value of an observational estimate
+    (VanderWeele and Ding 2017), the strength of unmeasured confounding
+    that would explain it away, for risk, odds and hazard ratios and
+    standardised mean differences. Values match the EValue package.
+
 * A third companion: tidyepidemio (epidemiology). `tidyvisor()` hands it
   case counts, exposures and outcomes, and its results (ratios, Rt, growth,
   diagnostic accuracy, surveillance alerts, standardised effects, survival
