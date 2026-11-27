@@ -123,7 +123,7 @@ own advisors when installed:
 ecology (diversity, ordination, multivariate tests) and
 [tidymapr](https://tidymapr.in4metrix.dev/) for spatial ecology (species
 distributions, invasions, the spread of epidemics, range shifts) and
-[tidyepidemio](https://jmozez.github.io/tidyepidemio/) for epidemiology
+[tidyepidemio](https://tidyepidemio.in4metrix.dev/) for epidemiology
 (outbreaks, associations, survival, diagnostic tests, surveillance, causal
 effects). `advisors()` lists what is available:
 
