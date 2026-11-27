@@ -40,7 +40,7 @@ Other packages can join with `register_advisor()`.
 
 ## Installation
 
-Install tidyvisor first, then the two companion packages whose advisors
+Install tidyvisor first, then the companion packages whose advisors
 it uses:
 
 ``` r
@@ -57,6 +57,10 @@ remotes::install_github("jmozez/tidydiversity")
 # 3. tidymapr: spatial ecology (maps, species distributions, the spread of
 #    invasions and epidemics, range shifts, spatial autocorrelation)
 remotes::install_github("jmozez/tidymapr")
+
+# 4. tidyepidemio: epidemiology (outbreaks, Rt, associations, survival,
+#    diagnostic tests, surveillance and causal effects)
+remotes::install_github("jmozez/tidyepidemio")
 ```
 
 tidyvisor works on its own; the companion packages add their advisors
